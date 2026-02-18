@@ -257,6 +257,12 @@ function GrapplingTournamentApp() {
         const firebaseData = snapshot.val();
         
         if (firebaseData) {
+          // Ensure all required fields exist with defaults
+          firebaseData.athletes = firebaseData.athletes || [];
+          firebaseData.teams = firebaseData.teams || [];
+          firebaseData.tournaments = firebaseData.tournaments || [];
+          firebaseData.weightClasses = firebaseData.weightClasses || [];
+          
           // Process Firebase data
           firebaseData.athletes.forEach(a => {
             a.stats = a.stats || {};
