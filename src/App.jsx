@@ -2655,15 +2655,22 @@ Last Generated: ${new Date().toLocaleString()}
     reader.readAsBinaryString(file);
   };
 
-  const teamPoints = data.teams.map(team => ({
+  // Add safety defaults for teams and weight classes
+  const safeData = {
+    ...data,
+    teams: data.teams.map(t => ({ ...t, athleteIds: t.athleteIds || [] })),
+    weightClasses: data.weightClasses.map(wc => ({ ...wc, athleteIds: wc.athleteIds || [] }))
+  };
+
+  const teamPoints = safeData.teams.map(team => ({
     name: team.name,
     points: team.athleteIds.reduce((sum, id) => {
-      const athlete = data.athletes.find(a => a.id === id);
+      const athlete = safeData.athletes.find(a => a.id === id);
       return sum + (athlete?.stats.pointsFor || 0);
     }, 0)
   })).sort((a, b) => b.points - a.points);
 
-  const filteredAthletes = data.athletes.filter(a =>
+  const filteredAthletes = safeData.athletes.filter(a =>
     a.name.toLowerCase().includes(athleteSearch.toLowerCase())
   ).sort((a, b) => a.name.localeCompare(b.name));
 
@@ -3542,7 +3549,10 @@ Last Generated: ${new Date().toLocaleString()}
               </div>
             )}
 
-            {data.weightClasses.map((wc, i) => (
+            {data.weightClasses.map((wc, i) => {
+              // Ensure athleteIds exists
+              const weightClass = { ...wc, athleteIds: wc.athleteIds || [] };
+              return (
               <div key={i} style={{ background: cardBg, borderRadius: '10px', padding: '15px', marginBottom: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                   {editingWeightClass === i ? (
@@ -3554,12 +3564,12 @@ Last Generated: ${new Date().toLocaleString()}
                   ) : (
                     <>
                       <div onClick={() => setExpandedWeight(expandedWeight === i ? null : i)} style={{ fontWeight: 'bold', cursor: 'pointer', flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-                        <span>{wc.name}</span>
-                        <span>{wc.athleteIds.length} athletes</span>
+                        <span>{weightClass.name}</span>
+                        <span>{weightClass.athleteIds.length} athletes</span>
                       </div>
                       {isOfficial && (
                         <div style={{ display: 'flex', gap: '8px', marginLeft: '10px' }}>
-                          <button onClick={() => startEditWeightClass(i, wc.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
+                          <button onClick={() => startEditWeightClass(i, weightClass.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
                             <Edit2 size={14} />
                           </button>
                           <button onClick={() => deleteWeightClass(i)} style={{ padding: '4px 8px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
@@ -3572,10 +3582,10 @@ Last Generated: ${new Date().toLocaleString()}
                 </div>
                 {expandedWeight === i && (
                   <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
-                    {wc.athleteIds.length === 0 ? (
+                    {weightClass.athleteIds.length === 0 ? (
                       <li style={{ color: '#666', fontStyle: 'italic' }}>No athletes in this weight class</li>
                     ) : (
-                      wc.athleteIds.map(id => {
+                      weightClass.athleteIds.map(id => {
                         const athlete = data.athletes.find(a => a.id === id);
                         return <li key={id} onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', padding: '4px 0', color: '#007bff', textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1 }}>{athlete?.name} - {athlete?.weight} lbs {athlete?.isCoach ? '(Coach)' : ''} {athlete?.injured && '(Injured)'}</li>;
                       })
@@ -3583,7 +3593,8 @@ Last Generated: ${new Date().toLocaleString()}
                   </ul>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
         {currentTab === 'tournaments' && (
