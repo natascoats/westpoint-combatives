@@ -2808,6 +2808,18 @@ Last Generated: ${new Date().toLocaleString()}
     }
   };
 
+  // Safety check - don't render until data is properly initialized
+  if (!data || !data.athletes || !data.teams || !data.tournaments) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '16px' }}>WEST POINT COMBATIVES</h2>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ fontFamily: typography.fontFamily, minHeight: '100vh', background: bgColor, width: '100%', margin: 0, color: textColor }}>
       <header style={{ background: headerBg, color: colors.textInverse, padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: shadows.md, borderBottom: '2px solid #b8860b' }}>
