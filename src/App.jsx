@@ -1,6 +1,6 @@
 // West Point Combatives Tournament Manager
 import React, { useState, useEffect } from 'react';
-import { Edit2, Plus, Search, Moon, Sun, X, Upload, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit2, Plus, Search, Moon, Sun, X, Upload, ChevronDown, ChevronUp, Download, Undo, UserX, UserMinus } from 'lucide-react';
 
 const WEIGHT_BRACKETS = [
   { name: "150–160", min: 150, max: 160 },
