@@ -1,6 +1,7 @@
 // West Point Combatives Tournament Manager
 import React, { useState, useEffect } from 'react';
 import { Edit2, Plus, Search, Moon, Sun, X, Upload, ChevronDown, ChevronUp, Download, Undo, UserX, UserMinus } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 const WEIGHT_BRACKETS = [
   { name: "150–160", min: 150, max: 160 },
@@ -2644,41 +2645,120 @@ Last Generated: ${new Date().toLocaleString()}
     if (currentRole !== 'official') return;
     const file = e.target.files[0];
     if (!file) return;
+    
+    setLoading(true);
     const reader = new FileReader();
     reader.onload = (event) => {
-      const wb = XLSX.read(event.target.result, { type: 'binary' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const imported = XLSX.utils.sheet_to_json(ws);
-      const newData = { ...data, athletes: [], teams: [] };
-      newData.weightClasses = WEIGHT_BRACKETS.map(b => ({ name: b.name, athleteIds: [] }));
-      const teamMap = {};
-      imported.forEach(row => {
-        const athlete = {
-          id: crypto.randomUUID(),
-          name: row.Name || 'Unknown',
-          weight: row.Weight || 160,
-          injured: row.Injured === 'Yes',
-          isCoach: row.Role === 'Coach',
-          stats: {
-            wins: { points: row['Wins (Points)'] || 0, submission: row['Wins (Submission)'] || 0 },
-            losses: { points: 0, submission: 0 },
-            pointsFor: row['Total Points'] || 0
+      try {
+        const wb = XLSX.read(event.target.result, { type: 'binary' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const imported = XLSX.utils.sheet_to_json(ws);
+        
+        const newData = { ...data, athletes: [], teams: [] };
+        newData.weightClasses = WEIGHT_BRACKETS.map(b => ({ name: b.name, athleteIds: [] }));
+        const teamMap = {};
+        
+        imported.forEach(row => {
+          const athlete = {
+            id: crypto.randomUUID(),
+            name: row.Name || 'Unknown',
+            weight: row.Weight || 160,
+            injured: row.Injured === 'Yes',
+            isCoach: row.Role === 'Coach',
+            stats: {
+              wins: { points: row['Wins (Points)'] || 0, submission: row['Wins (Submission)'] || 0 },
+              losses: { points: 0, submission: 0 },
+              pointsFor: row['Total Points'] || 0
+            }
+          };
+          newData.athletes.push(athlete);
+          
+          const teamName = row.Team || 'Unknown';
+          if (!teamMap[teamName]) teamMap[teamName] = { name: teamName, athleteIds: [] };
+          teamMap[teamName].athleteIds.push(athlete.id);
+          
+          const bracket = WEIGHT_BRACKETS.find(b => athlete.weight >= b.min && athlete.weight <= b.max);
+          if (bracket) {
+            const wc = newData.weightClasses.find(w => w.name === bracket.name);
+            if (wc) wc.athleteIds.push(athlete.id);
           }
-        };
-        newData.athletes.push(athlete);
-        const teamName = row.Team || 'Unknown';
-        if (!teamMap[teamName]) teamMap[teamName] = { name: teamName, athleteIds: [] };
-        teamMap[teamName].athleteIds.push(athlete.id);
-        const bracket = WEIGHT_BRACKETS.find(b => athlete.weight >= b.min && athlete.weight <= b.max);
-        if (bracket) {
-          const wc = newData.weightClasses.find(w => w.name === bracket.name);
-          if (wc) wc.athleteIds.push(athlete.id);
-        }
-      });
-      newData.teams = Object.values(teamMap);
-      saveData(newData);
+        });
+        
+        newData.teams = Object.values(teamMap);
+        saveData(newData);
+        showToastNotification(`Imported ${imported.length} athletes from Excel`, 'success');
+        setLoading(false);
+      } catch (error) {
+        console.error('Import error:', error);
+        showToastNotification('Error importing Excel file', 'error');
+        setLoading(false);
+      }
     };
     reader.readAsBinaryString(file);
+    e.target.value = ''; // Reset file input
+  };
+  
+  const downloadTemplate = () => {
+    const template = [
+      {
+        Name: 'John Smith',
+        Team: 'Alpha Company',
+        Weight: 165,
+        Role: 'Player',
+        'Wins (Points)': 0,
+        'Wins (Submission)': 0,
+        'Total Points': 0,
+        Injured: 'No'
+      },
+      {
+        Name: 'Jane Doe',
+        Team: 'Bravo Company',
+        Weight: 155,
+        Role: 'Coach',
+        'Wins (Points)': 0,
+        'Wins (Submission)': 0,
+        'Total Points': 0,
+        Injured: 'No'
+      }
+    ];
+    
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(template);
+    
+    // Add instructions in comment/note
+    ws['!cols'] = [
+      { wch: 20 }, // Name
+      { wch: 20 }, // Team
+      { wch: 10 }, // Weight
+      { wch: 10 }, // Role
+      { wch: 15 }, // Wins (Points)
+      { wch: 18 }, // Wins (Submission)
+      { wch: 12 }, // Total Points
+      { wch: 10 }  // Injured
+    ];
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Athletes");
+    
+    // Add instructions sheet
+    const instructions = [
+      { 'IMPORT INSTRUCTIONS': 'Fill out the Athletes sheet with your data' },
+      { 'IMPORT INSTRUCTIONS': 'Name: Full name of athlete' },
+      { 'IMPORT INSTRUCTIONS': 'Team: Company/Team name' },
+      { 'IMPORT INSTRUCTIONS': 'Weight: Weight in lbs (150-210)' },
+      { 'IMPORT INSTRUCTIONS': 'Role: Either "Player" or "Coach"' },
+      { 'IMPORT INSTRUCTIONS': 'Wins (Points): Number (leave 0 for new)' },
+      { 'IMPORT INSTRUCTIONS': 'Wins (Submission): Number (leave 0 for new)' },
+      { 'IMPORT INSTRUCTIONS': 'Total Points: Number (leave 0 for new)' },
+      { 'IMPORT INSTRUCTIONS': 'Injured: "Yes" or "No"' },
+      { 'IMPORT INSTRUCTIONS': '' },
+      { 'IMPORT INSTRUCTIONS': 'Delete the example rows before importing!' }
+    ];
+    const wsInstructions = XLSX.utils.json_to_sheet(instructions);
+    wsInstructions['!cols'] = [{ wch: 50 }];
+    XLSX.utils.book_append_sheet(wb, wsInstructions, "Instructions");
+    
+    XLSX.writeFile(wb, `WestPoint_Import_Template_${regimentName}.xlsx`);
+    showToastNotification('Template downloaded', 'success');
   };
 
   // Add safety defaults for teams and weight classes
@@ -4771,7 +4851,7 @@ Last Generated: ${new Date().toLocaleString()}
                 <button onClick={exportToExcel} style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Download size={16} /> Export to Excel
                 </button>
-                <button onClick={exportImportTemplate} style={{ padding: '8px 14px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button onClick={downloadTemplate} style={{ padding: '8px 14px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Download size={16} /> Download Import Template
                 </button>
                 <label style={{ padding: '8px 14px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
