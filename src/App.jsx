@@ -790,6 +790,32 @@ function GrapplingTournamentApp() {
       saveData(newData);
       setUndoStack(prev => prev.slice(0, -1));
       showToastNotification('Match result undone', 'success');
+    } else if (lastAction.type === 'athleteDelete') {
+      // Restore deleted athlete
+      const newData = JSON.parse(JSON.stringify(data));
+      
+      // Restore athlete
+      newData.athletes.push(lastAction.athlete);
+      
+      // Restore team assignments
+      lastAction.teamAssignments.forEach(teamName => {
+        const team = newData.teams.find(t => t.name === teamName);
+        if (team && !team.athleteIds.includes(lastAction.athlete.id)) {
+          team.athleteIds.push(lastAction.athlete.id);
+        }
+      });
+      
+      // Restore weight class assignments
+      lastAction.weightClassAssignments.forEach(wcName => {
+        const wc = newData.weightClasses.find(w => w.name === wcName);
+        if (wc && !wc.athleteIds.includes(lastAction.athlete.id)) {
+          wc.athleteIds.push(lastAction.athlete.id);
+        }
+      });
+      
+      saveData(newData);
+      setUndoStack(prev => prev.slice(0, -1));
+      showToastNotification(`Restored ${lastAction.athlete.name}`, 'success');
     }
   };
 
@@ -2835,6 +2861,85 @@ Last Generated: ${new Date().toLocaleString()}
 
   return (
     <div style={{ fontFamily: typography.fontFamily, minHeight: '100vh', background: bgColor, width: '100%', margin: 0, color: textColor }}>
+      {/* Loading Overlay */}
+      {loading && (
+        <div style={{ 
+          position: 'fixed', 
+          inset: 0, 
+          background: 'rgba(0,0,0,0.7)', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          zIndex: 99999,
+          backdropFilter: 'blur(4px)'
+        }}>
+          <div style={{ 
+            background: colors.bgCard, 
+            padding: '24px 32px', 
+            borderRadius: '8px', 
+            boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '16px'
+          }}>
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              border: '4px solid rgba(30, 58, 138, 0.2)',
+              borderTop: '4px solid #1e3a8a',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }} />
+            <div style={{ color: textColor, fontWeight: 'bold', fontSize: '16px' }}>SAVING...</div>
+          </div>
+        </div>
+      )}
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+      <style>{`
+        @media (max-width: 768px) {
+          /* Mobile header adjustments */
+          header {
+            flex-direction: column !important;
+            gap: 12px !important;
+            padding: 12px !important;
+          }
+          header > div {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          /* Mobile tab navigation */
+          nav {
+            flex-wrap: wrap !important;
+            overflow-x: auto !important;
+          }
+          /* Mobile cards */
+          [style*="display: grid"] {
+            grid-template-columns: 1fr !important;
+          }
+          /* Mobile tables */
+          table {
+            font-size: 12px !important;
+          }
+          td, th {
+            padding: 6px !important;
+          }
+          /* Mobile buttons */
+          button {
+            font-size: 12px !important;
+            padding: 6px 12px !important;
+          }
+          /* Mobile forms */
+          input, select, textarea {
+            font-size: 14px !important;
+            width: 100% !important;
+          }
+        }
+      `}</style>
       <header style={{ background: headerBg, color: colors.textInverse, padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: shadows.md, borderBottom: '2px solid #b8860b' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img 
@@ -5219,6 +5324,23 @@ Last Generated: ${new Date().toLocaleString()}
               {isOfficial && (
                 <button onClick={() => {
                   if (window.confirm(`Delete ${selectedPlayer.name}?`)) {
+                    // Save state for undo
+                    const teamAssignments = data.teams
+                      .filter(t => t.athleteIds && t.athleteIds.includes(selectedPlayer.id))
+                      .map(t => t.name);
+                    
+                    const weightClassAssignments = data.weightClasses
+                      .filter(wc => wc.athleteIds && wc.athleteIds.includes(selectedPlayer.id))
+                      .map(wc => wc.name);
+                    
+                    addToUndoStack({
+                      type: 'athleteDelete',
+                      athlete: JSON.parse(JSON.stringify(selectedPlayer)),
+                      teamAssignments,
+                      weightClassAssignments
+                    });
+                    
+                    // Delete athlete
                     const newData = { ...data };
                     newData.teams.forEach(t => {
                       t.athleteIds = t.athleteIds.filter(aid => aid !== selectedPlayer.id);
@@ -5229,6 +5351,7 @@ Last Generated: ${new Date().toLocaleString()}
                     newData.athletes = newData.athletes.filter(a => a.id !== selectedPlayer.id);
                     saveData(newData);
                     setSelectedPlayer(null);
+                    showToastNotification(`Deleted ${selectedPlayer.name} (undo available for 5 min)`, 'info');
                   }
                 }} style={{ padding: '8px 16px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>
                   Delete
