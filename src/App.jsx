@@ -166,6 +166,114 @@ const getDesignTokens = (darkMode) => ({
   }
 });
 
+// ============================================================================
+// DATA VALIDATION UTILITIES
+// ============================================================================
+
+const ValidationErrors = {
+  EMPTY_NAME: 'Name cannot be empty',
+  INVALID_NAME: 'Name must be at least 2 characters',
+  DUPLICATE_NAME: 'An athlete with this name already exists',
+  EMPTY_WEIGHT: 'Weight is required',
+  INVALID_WEIGHT: 'Weight must be a number between 100 and 300 lbs',
+  INVALID_WEIGHT_RANGE: 'Weight must be between 100-300 lbs for realistic competition',
+  EMPTY_TEAM: 'Team name cannot be empty',
+  DUPLICATE_TEAM: 'A team with this name already exists',
+  EMPTY_TOURNAMENT: 'Tournament name cannot be empty',
+  NO_WEIGHT_CLASS: 'Please select a weight class',
+  NO_DATE: 'Tournament date is required',
+  INVALID_DATE: 'Invalid date',
+  UNAUTHORIZED_MATCH: 'Only the tournament creator can score matches in this tournament'
+};
+
+// Validate athlete data
+const validateAthlete = (name, weight, existingAthletes = [], excludeId = null) => {
+  const errors = [];
+  
+  // Name validation
+  if (!name || !name.trim()) {
+    errors.push(ValidationErrors.EMPTY_NAME);
+  } else if (name.trim().length < 2) {
+    errors.push(ValidationErrors.INVALID_NAME);
+  } else {
+    // Check for duplicates
+    const duplicate = existingAthletes.find(a => 
+      a.id !== excludeId && 
+      a.name.toLowerCase().trim() === name.toLowerCase().trim()
+    );
+    if (duplicate) {
+      errors.push(ValidationErrors.DUPLICATE_NAME);
+    }
+  }
+  
+  // Weight validation
+  if (!weight && weight !== 0) {
+    errors.push(ValidationErrors.EMPTY_WEIGHT);
+  } else {
+    const weightNum = typeof weight === 'string' ? parseFloat(weight) : weight;
+    if (isNaN(weightNum)) {
+      errors.push(ValidationErrors.INVALID_WEIGHT);
+    } else if (weightNum < 100 || weightNum > 300) {
+      errors.push(ValidationErrors.INVALID_WEIGHT_RANGE);
+    }
+  }
+  
+  return errors;
+};
+
+// Validate team data
+const validateTeam = (name, existingTeams = [], excludeName = null) => {
+  const errors = [];
+  
+  if (!name || !name.trim()) {
+    errors.push(ValidationErrors.EMPTY_TEAM);
+  } else {
+    const duplicate = existingTeams.find(t => 
+      t.name.toLowerCase().trim() === name.toLowerCase().trim() &&
+      t.name !== excludeName
+    );
+    if (duplicate) {
+      errors.push(ValidationErrors.DUPLICATE_TEAM);
+    }
+  }
+  
+  return errors;
+};
+
+// Validate tournament data
+const validateTournament = (name, weightClass, year, month, day) => {
+  const errors = [];
+  
+  if (!name || !name.trim()) {
+    errors.push(ValidationErrors.EMPTY_TOURNAMENT);
+  }
+  
+  if (!weightClass) {
+    errors.push(ValidationErrors.NO_WEIGHT_CLASS);
+  }
+  
+  if (!year || !month || !day) {
+    errors.push(ValidationErrors.NO_DATE);
+  } else {
+    const yearNum = parseInt(year);
+    const dayNum = parseInt(day);
+    if (yearNum < 2000 || yearNum > 2100 || dayNum < 1 || dayNum > 31) {
+      errors.push(ValidationErrors.INVALID_DATE);
+    }
+  }
+  
+  return errors;
+};
+
+// Validate official can score in this tournament
+const validateOfficialAccess = (tournament, officialName) => {
+  if (!tournament.managedBy) return []; // Old tournaments without managedBy
+  if (tournament.managedBy === officialName) return [];
+  return [ValidationErrors.UNAUTHORIZED_MATCH];
+};
+
+// ============================================================================
+
 function GrapplingTournamentApp() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [currentRole, setCurrentRole] = useState('viewer');
@@ -1470,15 +1578,9 @@ Last Generated: ${new Date().toLocaleString()}
   };
 
   const addTeam = () => {
-    if (!newTeamName || newTeamName.trim() === '') {
-      showToastNotification('Team name is required', 'error');
-      return;
-    }
-    
-    // Check for duplicate
-    const duplicate = data.teams.find(t => t.name.toLowerCase() === newTeamName.trim().toLowerCase());
-    if (duplicate) {
-      showToastNotification('A team with this name already exists', 'error');
+    const errors = validateTeam(newTeamName, data.teams);
+    if (errors.length > 0) {
+      showToastNotification(errors[0], 'error');
       return;
     }
     
@@ -1542,14 +1644,20 @@ Last Generated: ${new Date().toLocaleString()}
   };
 
   const saveEditAthlete = (id) => {
-    if (!editAthleteName.trim() || !editAthleteWeight) return;
+    // Validate edited athlete data
+    const errors = validateAthlete(editAthleteName, editAthleteWeight, data.athletes, id);
+    if (errors.length > 0) {
+      showToastNotification(errors[0], 'error');
+      return;
+    }
+    
     const newWeight = parseInt(editAthleteWeight);
     const newData = { ...data };
     const athlete = newData.athletes.find(a => a.id === id);
     if (!athlete) return;
 
     const oldWeight = athlete.weight;
-    athlete.name = editAthleteName;
+    athlete.name = editAthleteName.trim();
     athlete.weight = newWeight;
     athlete.isCoach = editAthleteIsCoach;
 
@@ -1569,17 +1677,14 @@ Last Generated: ${new Date().toLocaleString()}
     setEditAthleteName('');
     setEditAthleteWeight('');
     setEditAthleteIsCoach(false);
+    showToastNotification('Athlete updated successfully', 'success');
   };
 
   const addAthlete = () => {
-    // Data validation
-    if (!newAthleteName || newAthleteName.trim() === '') {
-      showToastNotification('Athlete name is required', 'error');
-      return;
-    }
-    
-    if (!newAthleteWeight || newAthleteWeight.trim() === '') {
-      showToastNotification('Weight is required', 'error');
+    // Use validation function
+    const errors = validateAthlete(newAthleteName, newAthleteWeight, data.athletes);
+    if (errors.length > 0) {
+      showToastNotification(errors[0], 'error');
       return;
     }
     
@@ -1589,17 +1694,6 @@ Last Generated: ${new Date().toLocaleString()}
     }
     
     const weight = parseInt(newAthleteWeight);
-    if (isNaN(weight) || weight < 100 || weight > 400) {
-      showToastNotification('Invalid weight (must be 100-400 lbs)', 'error');
-      return;
-    }
-    
-    // Check for duplicate name
-    const duplicate = data.athletes.find(a => a.name.toLowerCase() === newAthleteName.trim().toLowerCase());
-    if (duplicate) {
-      showToastNotification('An athlete with this name already exists', 'error');
-      return;
-    }
     
     setLoading(true);
     
@@ -1800,34 +1894,14 @@ Last Generated: ${new Date().toLocaleString()}
       return;
     }
     
-    if (!tournamentName || tournamentName.trim() === '') {
-      showToastNotification('Tournament name is required', 'error');
+    const errors = validateTournament(tournamentName, tournamentWeight, tournamentYear, tournamentMonth, tournamentDay);
+    if (errors.length > 0) {
+      showToastNotification(errors[0], 'error');
       return;
     }
     
-    if (!tournamentWeight) {
-      showToastNotification('Please select a weight class', 'error');
-      return;
-    }
-    
-    if (!tournamentYear || !tournamentMonth || !tournamentDay) {
-      showToastNotification('Please enter a complete date', 'error');
-      return;
-    }
-    
-    // Validate year
     const year = parseInt(tournamentYear);
-    if (isNaN(year) || year < 2020 || year > 2100) {
-      showToastNotification('Invalid year (must be 2020-2100)', 'error');
-      return;
-    }
-    
-    // Validate day
     const day = parseInt(tournamentDay);
-    if (isNaN(day) || day < 1 || day > 31) {
-      showToastNotification('Invalid day (must be 1-31)', 'error');
-      return;
-    }
     
     const weightClass = data.weightClasses.find(w => w.name === tournamentWeight);
     if (!weightClass) {
@@ -1913,6 +1987,13 @@ Last Generated: ${new Date().toLocaleString()}
     const tournament = newData.tournaments[ti];
     const match = tournament.rounds[ri][mi];
     if (match.winner) return;
+    
+    // VALIDATION: Check if this official can score in this tournament
+    const accessErrors = validateOfficialAccess(tournament, officialName);
+    if (accessErrors.length > 0) {
+      showToastNotification(accessErrors[0], 'error');
+      return;
+    }
 
     // Save previous stats for undo
     const winner = winnerId === "BYE" ? null : newData.athletes.find(a => a.id === winnerId);
@@ -4122,8 +4203,21 @@ Last Generated: ${new Date().toLocaleString()}
                           <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>Date: {formatMilitaryDate(tournament.date.year, tournament.date.month, tournament.date.day)}</p>
                           {tournament.officials && <p style={{ fontSize: '13px', color: '#666', margin: '5px 0 0 0' }}>Officials: {tournament.officials}</p>}
                           {tournament.managedBy && (
-                            <p style={{ fontSize: '13px', color: colors.primary, fontWeight: 'bold', margin: '5px 0 0 0' }}>
-                              ⚙️ Managed by: {tournament.managedBy}
+                            <p style={{ 
+                              fontSize: '13px', 
+                              color: tournament.managedBy === officialName ? colors.success : colors.warning,
+                              fontWeight: 'bold', 
+                              margin: '5px 0 0 0',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}>
+                              {tournament.managedBy === officialName ? '✓' : '🔒'} Managed by: {tournament.managedBy}
+                              {tournament.managedBy !== officialName && isOfficial && (
+                                <span style={{ fontSize: '11px', fontWeight: 'normal', color: colors.textMuted }}>
+                                  (View only)
+                                </span>
+                              )}
                             </p>
                           )}
                           
