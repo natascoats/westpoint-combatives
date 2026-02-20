@@ -2232,117 +2232,134 @@ Last Generated: ${new Date().toLocaleString()}
         <title>${tournament.name} - Bracket</title>
         <style>
           @media print {
-            @page { margin: 0.5in; }
+            @page { 
+              margin: 0.3in; 
+              size: landscape;
+            }
             body { margin: 0; }
+            .print-btn { display: none; }
           }
+          * { box-sizing: border-box; }
           body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 15px;
             background: white;
             color: black;
+            font-size: 11px;
           }
           .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #000;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
           }
           .header h1 {
-            margin: 0 0 10px 0;
-            font-size: 32px;
+            margin: 0 0 5px 0;
+            font-size: 20px;
+            font-weight: bold;
           }
           .header .info {
-            font-size: 14px;
+            font-size: 10px;
             color: #666;
           }
           .rounds-container {
             display: flex;
-            gap: 40px;
-            justify-content: center;
+            gap: 15px;
+            justify-content: flex-start;
             overflow-x: auto;
           }
           .round {
-            min-width: 220px;
+            min-width: 180px;
+            flex-shrink: 0;
           }
           .round-title {
             font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 12px;
+            margin-bottom: 8px;
             text-align: center;
-            padding: 8px;
+            padding: 4px;
             background: #f0f0f0;
-            border: 2px solid #000;
+            border: 1px solid #000;
           }
           .match {
-            border: 2px solid #000;
-            margin-bottom: 20px;
-            padding: 10px;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+            padding: 5px;
             background: white;
             page-break-inside: avoid;
           }
           .athlete {
-            padding: 8px;
+            padding: 4px;
             border-bottom: 1px solid #ccc;
-            font-size: 14px;
+            font-size: 11px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
           }
           .athlete:last-child {
             border-bottom: none;
           }
           .athlete.winner {
             font-weight: bold;
-            background: #f0f0f0;
+            background: #e8e8e8;
           }
           .match-result {
-            margin-top: 8px;
-            padding: 6px;
+            margin-top: 4px;
+            padding: 3px;
             background: #f9f9f9;
-            font-size: 12px;
+            font-size: 9px;
             border-top: 1px solid #ddd;
           }
           .winner-badge {
             background: #28a745;
             color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 11px;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 8px;
+            font-weight: bold;
           }
           .footer {
-            margin-top: 40px;
+            margin-top: 20px;
             text-align: center;
-            font-size: 12px;
+            font-size: 9px;
             color: #666;
-            border-top: 2px solid #000;
-            padding-top: 15px;
+            border-top: 1px solid #000;
+            padding-top: 8px;
           }
           .champion-box {
-            margin-top: 30px;
-            padding: 20px;
-            border: 3px solid #ffd700;
+            margin-top: 15px;
+            padding: 10px;
+            border: 2px solid #ffd700;
             background: #fffef0;
             text-align: center;
           }
           .champion-box h2 {
-            margin: 0 0 10px 0;
-            color: #ffd700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            margin: 0 0 5px 0;
+            color: #d4af37;
+            font-size: 16px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+          }
+          .champion-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
           }
           .print-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 24px;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
             background: #007bff;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
           }
-          @media print {
-            .print-btn { display: none; }
+          .print-btn:hover {
+            background: #0056b3;
           }
         </style>
       </head>
@@ -2394,7 +2411,7 @@ Last Generated: ${new Date().toLocaleString()}
         ${tournament.done && tournament.champ ? `
           <div class="champion-box">
             <h2>🏆 CHAMPION 🏆</h2>
-            <div style="font-size: 24px; font-weight: bold; margin-top: 10px;">
+            <div class="champion-name">
               ${data.athletes.find(a => a.id === tournament.champ)?.name || 'Unknown'}
             </div>
           </div>
@@ -2509,27 +2526,68 @@ Last Generated: ${new Date().toLocaleString()}
     ];
     XLSX.utils.book_append_sheet(wb, wsWeights, "Weight Classes");
 
-    // Tournaments Sheet
-    const tournamentData = data.tournaments.map(t => ({
-      'Tournament Name': t.name,
-      'Weight Class': t.weight,
-      'Date': `${t.date.month} ${t.date.day}, ${t.date.year}`,
-      'Officials': t.officials || 'N/A',
-      'Status': t.done ? 'Completed' : 'Active',
-      'Champion': t.champ ? data.athletes.find(a => a.id === t.champ)?.name || 'Unknown' : 'TBD',
-      'Total Rounds': t.rounds.length
-    }));
-    const wsTournaments = XLSX.utils.json_to_sheet(tournamentData);
+    // Tournaments Sheet - Detailed Match Results
+    const tournamentMatchData = [];
+    data.tournaments.forEach(tournament => {
+      tournament.rounds.forEach((round, roundIndex) => {
+        round.forEach((match, matchIndex) => {
+          const athlete1 = data.athletes.find(a => a.id === match.athlete1);
+          const athlete2 = data.athletes.find(a => a.id === match.athlete2);
+          const winner = match.winner ? data.athletes.find(a => a.id === match.winner) : null;
+          
+          tournamentMatchData.push({
+            'Tournament': tournament.name,
+            'Weight Class': tournament.weight,
+            'Round': `Round ${roundIndex + 1}`,
+            'Match #': matchIndex + 1,
+            'Athlete 1': athlete1?.name || 'BYE',
+            'Athlete 2': athlete2?.name || 'BYE',
+            'Winner': winner?.name || (match.winner ? 'Unknown' : 'Not Scored'),
+            'Method': match.method || 'N/A',
+            'Score': match.score || 'N/A',
+            'Position Points': match.positionPoints || 'N/A',
+            'Notes': match.notes || '',
+            'Status': tournament.done ? 'Complete' : 'Active'
+          });
+        });
+      });
+      
+      // Add tournament summary row
+      if (tournament.done && tournament.champ) {
+        const champion = data.athletes.find(a => a.id === tournament.champ);
+        tournamentMatchData.push({
+          'Tournament': tournament.name,
+          'Weight Class': '',
+          'Round': '*** CHAMPION ***',
+          'Match #': '',
+          'Athlete 1': champion?.name || 'Unknown',
+          'Athlete 2': '',
+          'Winner': '',
+          'Method': '',
+          'Score': '',
+          'Position Points': '',
+          'Notes': `${tournament.date.month} ${tournament.date.day}, ${tournament.date.year}`,
+          'Status': 'Complete'
+        });
+      }
+    });
+    
+    const wsTournaments = XLSX.utils.json_to_sheet(tournamentMatchData);
     wsTournaments['!cols'] = [
-      { wch: 25 }, // Tournament Name
+      { wch: 25 }, // Tournament
       { wch: 15 }, // Weight Class
-      { wch: 20 }, // Date
-      { wch: 20 }, // Officials
-      { wch: 12 }, // Status
-      { wch: 20 }, // Champion
-      { wch: 12 }  // Total Rounds
+      { wch: 12 }, // Round
+      { wch: 8 },  // Match #
+      { wch: 20 }, // Athlete 1
+      { wch: 20 }, // Athlete 2
+      { wch: 20 }, // Winner
+      { wch: 15 }, // Method
+      { wch: 12 }, // Score
+      { wch: 15 }, // Position Points
+      { wch: 30 }, // Notes
+      { wch: 10 }  // Status
     ];
-    XLSX.utils.book_append_sheet(wb, wsTournaments, "Tournaments");
+    XLSX.utils.book_append_sheet(wb, wsTournaments, "Tournament Matches");
 
     // Summary/Overview Sheet
     const summaryData = [
