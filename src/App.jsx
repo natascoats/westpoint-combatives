@@ -3140,11 +3140,13 @@ Last Generated: ${new Date().toLocaleString()}
             onChange={(e) => {
               const newRole = e.target.value;
               setShowRoleBanner(true); // Show banner when role changes
-              if (newRole === 'coach' && coachPassword) {
+              if (newRole === 'coach') {
+                // Always show team selector for coach
                 setShowCoachTeamSelector(true);
                 setPasswordInput('');
                 setPasswordError('');
-              } else if (newRole === 'official' && officialPassword) {
+              } else if (newRole === 'official') {
+                // Always show name prompt for official
                 setShowOfficialNamePrompt(true);
                 setPasswordInput('');
                 setPasswordError('');
