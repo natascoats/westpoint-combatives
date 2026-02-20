@@ -3499,14 +3499,14 @@ Last Generated: ${new Date().toLocaleString()}
               {/* Center Column - Dashboard Slideshow */}
               {dashboardImages.length > 0 && (
                 <div style={{ 
-                  background: darkMode ? '#000' : '#1a1a1a',
+                  background: darkMode ? '#1a1a1a' : '#f5f5f5',
                   borderRadius: radius.lg, 
                   padding: '0', 
                   boxShadow: shadows.lg, 
                   overflow: 'hidden', 
                   position: 'relative', 
                   height: '450px',
-                  border: `2px solid ${colors.gold}`
+                  border: `1px solid ${borderColor}`
                 }}>
                   <img 
                     src={dashboardImages[currentSlide % dashboardImages.length].url} 
@@ -3514,28 +3514,25 @@ Last Generated: ${new Date().toLocaleString()}
                     style={{ 
                       width: '100%', 
                       height: '450px', 
-                      objectFit: 'cover',  // Changed from 'contain' to 'cover' for better quality
-                      objectPosition: 'center',
-                      imageRendering: '-webkit-optimize-contrast',  // Sharper images
-                      filter: 'contrast(1.05) saturate(1.1)'  // Slight enhancement
+                      objectFit: 'contain',  // Keep contain - respects aspect ratio
+                      objectPosition: 'center'
                     }}
                   />
-                  {/* Improved Caption Design */}
+                  {/* Improved Caption - Clean and Simple */}
                   {dashboardImages[currentSlide % dashboardImages.length].caption && (
                     <div style={{ 
                       position: 'absolute', 
                       bottom: 0, 
                       left: 0, 
                       right: 0, 
-                      background: `linear-gradient(to top, ${colors.gold} 0%, rgba(184, 150, 11, 0.95) 60%, transparent 100%)`,
-                      color: darkMode ? '#000' : '#1a1a1a',
-                      padding: '40px 24px 20px 24px', 
-                      fontSize: typography.fontSize.xl, 
-                      fontWeight: typography.fontWeight.extrabold,
-                      letterSpacing: typography.letterSpacing.wide,
-                      textTransform: 'uppercase',
-                      textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                      borderTop: '2px solid rgba(255,255,255,0.3)'
+                      background: 'rgba(0, 0, 0, 0.75)',
+                      backdropFilter: 'blur(10px)',
+                      color: 'white',
+                      padding: '16px 24px', 
+                      fontSize: typography.fontSize.base, 
+                      fontWeight: typography.fontWeight.semibold,
+                      lineHeight: typography.lineHeight.normal,
+                      borderTop: `2px solid ${colors.gold}`
                     }}>
                       {dashboardImages[currentSlide % dashboardImages.length].caption}
                     </div>
@@ -3550,9 +3547,10 @@ Last Generated: ${new Date().toLocaleString()}
                           left: '20px', 
                           top: '50%', 
                           transform: 'translateY(-50%)', 
-                          background: 'rgba(184, 150, 11, 0.9)', 
-                          color: darkMode ? '#000' : '#1a1a1a',
-                          border: '2px solid rgba(255,255,255,0.5)', 
+                          background: 'rgba(0, 0, 0, 0.5)', 
+                          backdropFilter: 'blur(5px)',
+                          color: 'white',
+                          border: '2px solid rgba(255, 255, 255, 0.3)', 
                           borderRadius: '50%', 
                           width: '50px', 
                           height: '50px', 
@@ -3565,8 +3563,14 @@ Last Generated: ${new Date().toLocaleString()}
                           transition: 'all 0.2s',
                           boxShadow: shadows.md
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.background = colors.gold}
-                        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(184, 150, 11, 0.9)'}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = `rgba(184, 150, 11, 0.9)`;
+                          e.currentTarget.style.borderColor = colors.gold;
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }}
                       >
                         ‹
                       </button>
@@ -3577,9 +3581,10 @@ Last Generated: ${new Date().toLocaleString()}
                           right: '20px', 
                           top: '50%', 
                           transform: 'translateY(-50%)', 
-                          background: 'rgba(184, 150, 11, 0.9)', 
-                          color: darkMode ? '#000' : '#1a1a1a',
-                          border: '2px solid rgba(255,255,255,0.5)', 
+                          background: 'rgba(0, 0, 0, 0.5)', 
+                          backdropFilter: 'blur(5px)',
+                          color: 'white',
+                          border: '2px solid rgba(255, 255, 255, 0.3)', 
                           borderRadius: '50%', 
                           width: '50px', 
                           height: '50px', 
@@ -3592,37 +3597,43 @@ Last Generated: ${new Date().toLocaleString()}
                           transition: 'all 0.2s',
                           boxShadow: shadows.md
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.background = colors.gold}
-                        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(184, 150, 11, 0.9)'}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = `rgba(184, 150, 11, 0.9)`;
+                          e.currentTarget.style.borderColor = colors.gold;
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }}
                       >
                         ›
                       </button>
                       {/* Slide Indicators */}
                       <div style={{ 
                         position: 'absolute', 
-                        bottom: '80px',  // Moved up to not overlap caption
+                        bottom: dashboardImages[currentSlide % dashboardImages.length].caption ? '70px' : '20px',
                         left: '50%', 
                         transform: 'translateX(-50%)', 
                         display: 'flex', 
-                        gap: '10px', 
-                        background: 'rgba(0,0,0,0.7)', 
-                        padding: '10px 16px', 
-                        borderRadius: '25px', 
-                        border: '2px solid rgba(184, 150, 11, 0.6)',
-                        boxShadow: shadows.md
+                        gap: '8px', 
+                        background: 'rgba(0, 0, 0, 0.5)', 
+                        backdropFilter: 'blur(5px)',
+                        padding: '8px 14px', 
+                        borderRadius: '20px', 
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        boxShadow: shadows.sm
                       }}>
                         {dashboardImages.map((_, idx) => (
                           <div 
                             key={idx}
                             onClick={() => setCurrentSlide(idx)}
                             style={{ 
-                              width: idx === currentSlide % dashboardImages.length ? '24px' : '12px',
-                              height: '12px', 
-                              borderRadius: '6px', 
-                              background: idx === currentSlide % dashboardImages.length ? colors.gold : 'rgba(255,255,255,0.4)', 
+                              width: idx === currentSlide % dashboardImages.length ? '20px' : '10px',
+                              height: '10px', 
+                              borderRadius: '5px', 
+                              background: idx === currentSlide % dashboardImages.length ? colors.gold : 'rgba(255, 255, 255, 0.5)', 
                               cursor: 'pointer', 
-                              transition: 'all 0.3s ease',
-                              border: `1px solid ${idx === currentSlide % dashboardImages.length ? colors.gold : 'rgba(255,255,255,0.3)'}`
+                              transition: 'all 0.3s ease'
                             }}
                           />
                         ))}
