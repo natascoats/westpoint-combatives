@@ -4275,7 +4275,13 @@ Last Generated: ${new Date().toLocaleString()}
                 {tournamentFilter === 'mine' ? 'No tournaments managed by you' : 'No active tournaments'}
               </p>
             ) : (
-              activeTournaments.filter(tournament => {
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+                gap: '15px',
+                marginBottom: '20px'
+              }}>
+              {activeTournaments.filter(tournament => {
                 if (tournamentFilter === 'mine' && isOfficial && officialName) {
                   return tournament.managedBy === officialName;
                 }
@@ -4284,6 +4290,9 @@ Last Generated: ${new Date().toLocaleString()}
                 const actualIndex = data.tournaments.findIndex(t => t === tournament);
                 const isExpanded = expandedTournaments[actualIndex];
                 const lastRound = tournament.rounds[tournament.rounds.length - 1];
+                const totalMatches = tournament.rounds.reduce((sum, round) => sum + round.length, 0);
+                const completedMatches = tournament.rounds.reduce((sum, round) => sum + round.filter(m => m.winner).length, 0);
+                const progressPercent = totalMatches > 0 ? Math.round((completedMatches / totalMatches) * 100) : 0;
                 const activeAthletes = [];
                 lastRound.forEach(match => {
                   if (!match.winner) {
@@ -4293,27 +4302,135 @@ Last Generated: ${new Date().toLocaleString()}
                 });
 
                 return (
-                  <div key={actualIndex} style={{ background: cardBg, borderRadius: radius.md, padding: '15px', marginBottom: '15px', boxShadow: shadows.md, border: `1px solid ${borderColor}`, position: 'relative' }}>
-                    <div onClick={() => setExpandedTournaments(prev => ({ ...prev, [actualIndex]: !prev[actualIndex] }))} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isExpanded ? '15px' : '0' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                          <h4 style={{ ...headingStyles.h4, margin: 0 }}>{tournament.name} — {tournament.weight}</h4>
-                          {(() => {
-                            const status = getTournamentStatus(tournament);
-                            return (
-                              <span style={badgeStyles(status.type)}>
-                                {status.icon} {status.text}
-                              </span>
-                            );
-                          })()}
-                        </div>
-                        <p style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, margin: 0 }}>
-                          Round {tournament.rounds.length} • {lastRound.filter(m => !m.winner).length} matches pending
-                        </p>
+                  <div key={actualIndex} style={{ 
+                    background: cardBg, 
+                    borderRadius: radius.lg, 
+                    padding: '0',
+                    boxShadow: shadows.md, 
+                    border: isExpanded ? `2px solid ${colors.primary}` : `1px solid ${borderColor}`,
+                    overflow: 'hidden',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    maxHeight: isExpanded ? 'none' : '220px'
+                  }}>
+                    {/* Compact Header - Always Visible */}
+                    <div 
+                      onClick={() => setExpandedTournaments(prev => ({ ...prev, [actualIndex]: !prev[actualIndex] }))} 
+                      style={{ 
+                        cursor: 'pointer', 
+                        padding: '15px',
+                        background: `linear-gradient(135deg, ${isExpanded ? colors.primary : colors.bgHover} 0%, ${isExpanded ? colors.primaryHover : cardBg} 100%)`,
+                        borderBottom: `2px solid ${colors.gold}`,
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
+                        <h4 style={{ 
+                          margin: 0, 
+                          fontSize: typography.fontSize.lg,
+                          fontWeight: typography.fontWeight.bold,
+                          color: isExpanded ? colors.textInverse : textColor,
+                          flex: 1
+                        }}>
+                          {tournament.name}
+                        </h4>
+                        {isExpanded ? <ChevronUp size={20} color={colors.textInverse} /> : <ChevronDown size={20} />}
                       </div>
-                      {isExpanded ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <span style={{ 
+                          fontSize: typography.fontSize.sm, 
+                          color: isExpanded ? colors.textInverse : colors.textMuted,
+                          fontWeight: typography.fontWeight.medium
+                        }}>
+                          {tournament.weight}
+                        </span>
+                        <span style={{ fontSize: typography.fontSize.sm, color: isExpanded ? 'rgba(255,255,255,0.7)' : colors.textMuted }}>•</span>
+                        <span style={{ fontSize: typography.fontSize.sm, color: isExpanded ? 'rgba(255,255,255,0.7)' : colors.textMuted }}>
+                          Round {tournament.rounds.length}
+                        </span>
+                      </div>
+                      
+                      {(() => {
+                        const status = getTournamentStatus(tournament);
+                        return (
+                          <span style={{
+                            ...badgeStyles(status.type),
+                            fontSize: '10px',
+                            padding: '3px 8px'
+                          }}>
+                            {status.icon} {status.text}
+                          </span>
+                        );
+                      })()}
                     </div>
 
+                    {/* Progress Bar - Always Visible */}
+                    <div style={{ padding: '12px 15px', borderBottom: `1px solid ${borderColor}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: typography.fontSize.xs, marginBottom: '6px', color: colors.textMuted }}>
+                        <span>Progress</span>
+                        <span>{completedMatches} / {totalMatches} matches</span>
+                      </div>
+                      <div style={{ 
+                        background: darkMode ? '#3d3d3d' : '#e0e0e0', 
+                        borderRadius: radius.full, 
+                        height: '8px', 
+                        overflow: 'hidden' 
+                      }}>
+                        <div style={{ 
+                          background: `linear-gradient(90deg, ${colors.success} 0%, ${colors.primary} 100%)`,
+                          height: '100%', 
+                          width: `${progressPercent}%`, 
+                          transition: 'width 0.3s ease',
+                          borderRadius: radius.full
+                        }}></div>
+                      </div>
+                      <div style={{ 
+                        fontSize: typography.fontSize.xs, 
+                        color: lastRound.filter(m => !m.winner).length > 0 ? colors.warning : colors.success,
+                        fontWeight: typography.fontWeight.semibold,
+                        marginTop: '6px'
+                      }}>
+                        {lastRound.filter(m => !m.winner).length > 0 
+                          ? `${lastRound.filter(m => !m.winner).length} matches pending` 
+                          : 'Round complete! ✓'}
+                      </div>
+                    </div>
+
+                    {/* Quick Actions - Always Visible */}
+                    {!isExpanded && (
+                      <div style={{ padding: '12px 15px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpandedTournaments(prev => ({ ...prev, [actualIndex]: true }));
+                          }}
+                          style={{ 
+                            ...getButtonStyle('primary', 'sm'),
+                            flex: 1,
+                            minWidth: '120px'
+                          }}
+                        >
+                          View Bracket
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            printBracket(actualIndex);
+                          }}
+                          style={{ 
+                            ...getButtonStyle('outline', 'sm'),
+                            flex: 1,
+                            minWidth: '100px'
+                          }}
+                        >
+                          🖨️ Print
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Expanded Content */}
                     {isExpanded && (
                       <>
                         <div style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: `1px solid ${borderColor}` }}>
@@ -4557,7 +4674,8 @@ Last Generated: ${new Date().toLocaleString()}
                     )}
                   </div>
                 );
-              })
+              })}
+              </div>
             )}
           </div>
         )}
