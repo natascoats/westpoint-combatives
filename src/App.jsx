@@ -3590,15 +3590,11 @@ Last Generated: ${new Date().toLocaleString()}
               </div>
             )}
 
-            {data.teams.length === 0 ? <p style={{ color: '#666', fontStyle: 'italic' }}>No teams yet</p> : data.teams.filter(team => {
-              // Coaches can only see their team
-              if (isCoach) return team.name === coachTeam;
-              // Others see all teams
-              return true;
-            }).map((team, i) => {
-              const actualIndex = data.teams.indexOf(team);
+            {data.teams.length === 0 ? <p style={{ color: '#666', fontStyle: 'italic' }}>No teams yet</p> : data.teams.map((team, i) => {
+              const actualIndex = i;
+              const canEditThisTeam = isOfficial || (isCoach && team.name === coachTeam);
               return (
-              <div key={i} style={{ background: cardBg, borderRadius: '10px', padding: '15px', marginBottom: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+              <div key={i} style={{ background: cardBg, borderRadius: '10px', padding: '15px', marginBottom: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', opacity: isCoach && team.name !== coachTeam ? 0.7 : 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   {editingTeam === actualIndex ? (
                     <div style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -3608,11 +3604,11 @@ Last Generated: ${new Date().toLocaleString()}
                     </div>
                   ) : (
                     <div onClick={() => setExpandedTeam(expandedTeam === actualIndex ? null : actualIndex)} style={{ fontWeight: 'bold', cursor: 'pointer', flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-                      <span>{team.name} ({teamPoints.find(tp => tp.name === team.name)?.points || 0} pts)</span>
+                      <span>{team.name} ({teamPoints.find(tp => tp.name === team.name)?.points || 0} pts) {isCoach && team.name !== coachTeam && <span style={{ fontSize: '12px', color: '#999' }}>(View Only)</span>}</span>
                       <span>{team.athleteIds.length} athletes</span>
                     </div>
                   )}
-                  {(isOfficial || isCoach) && editingTeam !== actualIndex && (
+                  {canEditThisTeam && editingTeam !== actualIndex && (
                     <>
                       <button 
                         onClick={(e) => {
@@ -3624,9 +3620,11 @@ Last Generated: ${new Date().toLocaleString()}
                       >
                         🖨️ Print
                       </button>
-                      <button onClick={() => startEditTeam(actualIndex, team.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px' }}>
-                        <Edit2 size={14} />
-                      </button>
+                      {canEditThisTeam && (
+                        <button onClick={() => startEditTeam(actualIndex, team.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px' }}>
+                          <Edit2 size={14} />
+                        </button>
+                      )}
                     </>
                   )}
                     </div>
@@ -3665,7 +3663,7 @@ Last Generated: ${new Date().toLocaleString()}
                                     <span onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', color: '#007bff', textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1, fontSize: '13px', flex: 1 }}>
                                       {athlete?.name} {athlete?.isCoach ? '👔' : ''} {athlete?.injured && '🤕'}
                                     </span>
-                                    {(isOfficial || isCoach) && (
+                                    {canEditThisTeam && (
                                       <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
                                         <button onClick={() => toggleInjured(id)} style={{ padding: '2px 6px', background: athlete?.injured ? '#28a745' : '#ffc107', color: athlete?.injured ? 'white' : 'black', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
                                           {athlete?.injured ? 'Heal' : 'Injure'}
