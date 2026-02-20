@@ -3498,41 +3498,132 @@ Last Generated: ${new Date().toLocaleString()}
               
               {/* Center Column - Dashboard Slideshow */}
               {dashboardImages.length > 0 && (
-                <div style={{ background: cardBg, borderRadius: '10px', padding: '0', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', overflow: 'hidden', position: 'relative', height: '450px' }}>
+                <div style={{ 
+                  background: darkMode ? '#000' : '#1a1a1a',
+                  borderRadius: radius.lg, 
+                  padding: '0', 
+                  boxShadow: shadows.lg, 
+                  overflow: 'hidden', 
+                  position: 'relative', 
+                  height: '450px',
+                  border: `2px solid ${colors.gold}`
+                }}>
                   <img 
                     src={dashboardImages[currentSlide % dashboardImages.length].url} 
                     alt={dashboardImages[currentSlide % dashboardImages.length].caption}
-                    style={{ width: '100%', height: '450px', objectFit: 'contain', background: darkMode ? '#1a1a1a' : '#f0f0f0', padding: '20px' }}
+                    style={{ 
+                      width: '100%', 
+                      height: '450px', 
+                      objectFit: 'cover',  // Changed from 'contain' to 'cover' for better quality
+                      objectPosition: 'center',
+                      imageRendering: '-webkit-optimize-contrast',  // Sharper images
+                      filter: 'contrast(1.05) saturate(1.1)'  // Slight enhancement
+                    }}
                   />
+                  {/* Improved Caption Design */}
                   {dashboardImages[currentSlide % dashboardImages.length].caption && (
-                    <div style={{ position: 'absolute', bottom: '20px', left: '20px', right: '20px', background: 'linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0))', color: 'white', padding: '30px 20px 15px 20px', fontSize: '18px', fontWeight: 'bold', borderRadius: '8px', textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                    <div style={{ 
+                      position: 'absolute', 
+                      bottom: 0, 
+                      left: 0, 
+                      right: 0, 
+                      background: `linear-gradient(to top, ${colors.gold} 0%, rgba(184, 150, 11, 0.95) 60%, transparent 100%)`,
+                      color: darkMode ? '#000' : '#1a1a1a',
+                      padding: '40px 24px 20px 24px', 
+                      fontSize: typography.fontSize.xl, 
+                      fontWeight: typography.fontWeight.extrabold,
+                      letterSpacing: typography.letterSpacing.wide,
+                      textTransform: 'uppercase',
+                      textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                      borderTop: '2px solid rgba(255,255,255,0.3)'
+                    }}>
                       {dashboardImages[currentSlide % dashboardImages.length].caption}
                     </div>
                   )}
+                  {/* Navigation Arrows */}
                   {dashboardImages.length > 1 && (
                     <>
                       <button 
                         onClick={() => setCurrentSlide((currentSlide - 1 + dashboardImages.length) % dashboardImages.length)}
-                        style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: '2px solid rgba(255,255,255,0.3)', borderRadius: '50%', width: '50px', height: '50px', cursor: 'pointer', fontSize: '24px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-                        onMouseOver={(e) => e.target.style.background = 'rgba(0,0,0,0.8)'}
-                        onMouseOut={(e) => e.target.style.background = 'rgba(0,0,0,0.6)'}
+                        style={{ 
+                          position: 'absolute', 
+                          left: '20px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)', 
+                          background: 'rgba(184, 150, 11, 0.9)', 
+                          color: darkMode ? '#000' : '#1a1a1a',
+                          border: '2px solid rgba(255,255,255,0.5)', 
+                          borderRadius: '50%', 
+                          width: '50px', 
+                          height: '50px', 
+                          cursor: 'pointer', 
+                          fontSize: '28px', 
+                          fontWeight: typography.fontWeight.bold,
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center', 
+                          transition: 'all 0.2s',
+                          boxShadow: shadows.md
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = colors.gold}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(184, 150, 11, 0.9)'}
                       >
                         ‹
                       </button>
                       <button 
                         onClick={() => setCurrentSlide((currentSlide + 1) % dashboardImages.length)}
-                        style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: '2px solid rgba(255,255,255,0.3)', borderRadius: '50%', width: '50px', height: '50px', cursor: 'pointer', fontSize: '24px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-                        onMouseOver={(e) => e.target.style.background = 'rgba(0,0,0,0.8)'}
-                        onMouseOut={(e) => e.target.style.background = 'rgba(0,0,0,0.6)'}
+                        style={{ 
+                          position: 'absolute', 
+                          right: '20px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)', 
+                          background: 'rgba(184, 150, 11, 0.9)', 
+                          color: darkMode ? '#000' : '#1a1a1a',
+                          border: '2px solid rgba(255,255,255,0.5)', 
+                          borderRadius: '50%', 
+                          width: '50px', 
+                          height: '50px', 
+                          cursor: 'pointer', 
+                          fontSize: '28px', 
+                          fontWeight: typography.fontWeight.bold,
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center', 
+                          transition: 'all 0.2s',
+                          boxShadow: shadows.md
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = colors.gold}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(184, 150, 11, 0.9)'}
                       >
                         ›
                       </button>
-                      <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '10px', background: 'rgba(0,0,0,0.5)', padding: '8px 12px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                      {/* Slide Indicators */}
+                      <div style={{ 
+                        position: 'absolute', 
+                        bottom: '80px',  // Moved up to not overlap caption
+                        left: '50%', 
+                        transform: 'translateX(-50%)', 
+                        display: 'flex', 
+                        gap: '10px', 
+                        background: 'rgba(0,0,0,0.7)', 
+                        padding: '10px 16px', 
+                        borderRadius: '25px', 
+                        border: '2px solid rgba(184, 150, 11, 0.6)',
+                        boxShadow: shadows.md
+                      }}>
                         {dashboardImages.map((_, idx) => (
                           <div 
                             key={idx}
                             onClick={() => setCurrentSlide(idx)}
-                            style={{ width: '12px', height: '12px', borderRadius: '50%', background: idx === currentSlide % dashboardImages.length ? 'white' : 'rgba(255,255,255,0.4)', cursor: 'pointer', transition: 'all 0.2s', border: '1px solid rgba(255,255,255,0.3)' }}
+                            style={{ 
+                              width: idx === currentSlide % dashboardImages.length ? '24px' : '12px',
+                              height: '12px', 
+                              borderRadius: '6px', 
+                              background: idx === currentSlide % dashboardImages.length ? colors.gold : 'rgba(255,255,255,0.4)', 
+                              cursor: 'pointer', 
+                              transition: 'all 0.3s ease',
+                              border: `1px solid ${idx === currentSlide % dashboardImages.length ? colors.gold : 'rgba(255,255,255,0.3)'}`
+                            }}
                           />
                         ))}
                       </div>
@@ -3663,38 +3754,53 @@ Last Generated: ${new Date().toLocaleString()}
               </div>
             )}
 
-            {/* Stats Overview Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: spacing.lg, marginBottom: spacing['2xl'] }}>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.primary}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>🏆</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.primary }}>{data.teams.length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>TEAMS</div>
+            {/* Compact Stats Bar */}
+            <div style={{ 
+              background: `linear-gradient(135deg, ${colors.bgCard} 0%, ${colors.bgHover} 100%)`,
+              borderRadius: radius.lg, 
+              padding: '12px 20px', 
+              marginBottom: spacing.lg,
+              boxShadow: shadows.sm,
+              border: `1px solid ${borderColor}`,
+              display: 'flex',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>🏆</span>
+                <span style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>Teams:</span>
+                <span style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.primary }}>{data.teams.length}</span>
               </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.success}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>⚔️</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.success }}>{data.athletes.length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>ATHLETES</div>
+              <div style={{ width: '1px', height: '30px', background: borderColor }}></div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>⚔️</span>
+                <span style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>Athletes:</span>
+                <span style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.success }}>{data.athletes.length}</span>
               </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.gold}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>🎖️</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: '#b8860b' }}>{data.athletes.filter(a => a.isCoach).length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>COACHES</div>
+              <div style={{ width: '1px', height: '30px', background: borderColor }}></div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>🛡️</span>
+                <span style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>Active:</span>
+                <span style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.warning }}>{data.tournaments.filter(t => !t.done).length}</span>
               </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.warning}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>🛡️</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.warning }}>{data.tournaments.filter(t => !t.done).length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>ACTIVE</div>
+              <div style={{ width: '1px', height: '30px', background: borderColor }}></div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>✓</span>
+                <span style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>Complete:</span>
+                <span style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.neutral }}>{data.tournaments.filter(t => t.done).length}</span>
               </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.neutral}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>✓</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.neutral }}>{data.tournaments.filter(t => t.done).length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>COMPLETED</div>
-              </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.danger}`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '36px', marginBottom: '8px' }}>🏥</div>
-                <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.danger }}>{data.athletes.filter(a => a.injured).length}</div>
-                <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>INJURED</div>
-              </div>
+              {data.athletes.filter(a => a.injured).length > 0 && (
+                <>
+                  <div style={{ width: '1px', height: '30px', background: borderColor }}></div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '18px' }}>🏥</span>
+                    <span style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>Injured:</span>
+                    <span style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.danger }}>{data.athletes.filter(a => a.injured).length}</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div style={{ ...cardStyles.base, marginBottom: spacing.lg }}>
