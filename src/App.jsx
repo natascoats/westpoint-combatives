@@ -49,52 +49,75 @@ const MASTER_RECOVERY_KEY = "USMA-GTM-2025-MASTER-OVERRIDE";
 // Professional Design System - Sharp Military Aesthetic
 const getDesignTokens = (darkMode) => ({
   colors: {
-    primary: darkMode ? '#1e40af' : '#1e3a8a',      // Deeper navy blue
-    primaryHover: darkMode ? '#1e3a8a' : '#172554',
-    success: darkMode ? '#15803d' : '#166534',      // Darker green
-    successHover: darkMode ? '#166534' : '#14532d',
-    warning: darkMode ? '#ca8a04' : '#a16207',      // Darker amber
-    warningHover: darkMode ? '#a16207' : '#854d0e',
-    danger: darkMode ? '#b91c1c' : '#991b1b',       // Darker red
-    dangerHover: darkMode ? '#991b1b' : '#7f1d1d',
-    neutral: darkMode ? '#4b5563' : '#374151',      // Darker gray
+    // West Point primary colors - Black, Gray, Gold
+    primary: darkMode ? '#d4af37' : '#8b7355',           // Army gold
+    primaryHover: darkMode ? '#b8960b' : '#6b5635',
+    primaryLight: darkMode ? '#f4d03f' : '#d4af37',
     
-    bg: darkMode ? '#0f172a' : '#f1f5f9',            // Slightly darker bg
-    bgCard: darkMode ? '#1e293b' : '#ffffff',
-    bgHover: darkMode ? '#334155' : '#e2e8f0',
-    bgInput: darkMode ? '#1e293b' : '#ffffff',
-    bgHeader: darkMode ? '#0f172a' : '#0f172a',      // Always dark header
+    // Accent colors - kept minimal, professional
+    success: darkMode ? '#10b981' : '#059669',           // Keep green for success
+    successHover: darkMode ? '#059669' : '#047857',
+    warning: darkMode ? '#d4af37' : '#b8960b',           // Use gold for warnings
+    warningHover: darkMode ? '#b8960b' : '#8b7355',
+    danger: darkMode ? '#ef4444' : '#dc2626',            // Red for danger only
+    dangerHover: darkMode ? '#dc2626' : '#b91c1c',
+    neutral: darkMode ? '#71717a' : '#52525b',           // Gray
     
-    text: darkMode ? '#f1f5f9' : '#0f172a',
-    textMuted: darkMode ? '#94a3b8' : '#475569',
+    // Backgrounds - Black/Gray/White scheme
+    bg: darkMode ? '#18181b' : '#fafaf9',                // Almost black / Almost white
+    bgCard: darkMode ? '#27272a' : '#ffffff',            // Dark gray / White
+    bgHover: darkMode ? '#3f3f46' : '#f5f5f4',          // Lighter gray
+    bgInput: darkMode ? '#27272a' : '#ffffff',
+    bgHeader: darkMode ? '#09090b' : '#18181b',          // Pure black header
+    bgNav: darkMode ? '#3f3f46' : '#e7e5e4',            // Gray nav
+    
+    // Text colors - High contrast black/white
+    text: darkMode ? '#fafaf9' : '#18181b',             // Off-white / Almost black
+    textMuted: darkMode ? '#a1a1aa' : '#71717a',        // Gray
     textInverse: '#ffffff',
-    textSubtle: darkMode ? '#64748b' : '#94a3b8',
+    textSubtle: darkMode ? '#71717a' : '#a1a1aa',
     
-    border: darkMode ? '#334155' : '#cbd5e1',
-    borderLight: darkMode ? '#1e293b' : '#e2e8f0',
+    // Borders - Gray scheme
+    border: darkMode ? '#3f3f46' : '#d4d4d8',
+    borderLight: darkMode ? '#27272a' : '#e7e5e4',
     
-    gold: '#eab308',
-    silver: '#94a3b8',
-    bronze: '#ea580c'
+    // Accent colors - Minimal use
+    info: darkMode ? '#71717a' : '#52525b',              // Gray instead of blue
+    infoLight: darkMode ? '#a1a1aa' : '#71717a',
+    
+    // Medal colors - Gold/Silver/Bronze
+    gold: '#d4af37',                                     // Army gold
+    goldLight: '#f4d03f',
+    silver: '#a8a29e',                                   // Silver gray
+    silverLight: '#d6d3d1',
+    bronze: '#cd7f32',                                   // Bronze
+    bronzeLight: '#e59866',
+    
+    // Army gold accent - use sparingly for highlights
+    accent: '#d4af37',
+    accentHover: '#b8960b'
   },
   
   shadows: {
-    sm: darkMode ? '0 1px 3px 0 rgba(0, 0, 0, 0.5)' : '0 1px 3px 0 rgba(0, 0, 0, 0.12)',
-    md: darkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.6)' : '0 4px 6px -1px rgba(0, 0, 0, 0.18)',
-    lg: darkMode ? '0 10px 15px -3px rgba(0, 0, 0, 0.7)' : '0 10px 15px -3px rgba(0, 0, 0, 0.25)',
-    inner: darkMode ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.4)' : 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.1)'
+    sm: darkMode ? '0 1px 2px 0 rgba(0, 0, 0, 0.6)' : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    md: darkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.7)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    lg: darkMode ? '0 10px 15px -3px rgba(0, 0, 0, 0.8)' : '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    xl: darkMode ? '0 20px 25px -5px rgba(0, 0, 0, 0.9)' : '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+    inner: darkMode ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.5)' : 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+    outline: darkMode ? '0 0 0 3px rgba(212, 175, 55, 0.5)' : '0 0 0 3px rgba(212, 175, 55, 0.2)',
+    gold: '0 0 20px rgba(212, 175, 55, 0.3)'             // Gold glow
   },
   
   typography: {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: {
-      xs: '11px',
-      sm: '13px',
-      base: '15px',
-      lg: '17px',
-      xl: '19px',
-      '2xl': '22px',
-      '3xl': '28px'
+      xs: '12px',
+      sm: '14px',
+      base: '16px',
+      lg: '18px',
+      xl: '20px',
+      '2xl': '24px',
+      '3xl': '30px'
     },
     fontWeight: {
       normal: 400,
@@ -106,15 +129,21 @@ const getDesignTokens = (darkMode) => ({
     letterSpacing: {
       tight: '-0.025em',
       normal: '0',
-      wide: '0.025em'
+      wide: '0.025em',
+      wider: '0.05em'
+    },
+    lineHeight: {
+      tight: '1.25',
+      normal: '1.5',
+      relaxed: '1.75'
     }
   },
   
   borderRadius: {
-    sm: '3px',
-    md: '4px',
-    lg: '6px',
-    xl: '8px',
+    sm: '4px',
+    md: '6px',
+    lg: '8px',
+    xl: '12px',
     full: '9999px'
   },
   
@@ -125,7 +154,8 @@ const getDesignTokens = (darkMode) => ({
     lg: '16px',
     xl: '20px',
     '2xl': '24px',
-    '3xl': '32px'
+    '3xl': '32px',
+    '4xl': '48px'
   }
 });
 
@@ -2863,7 +2893,7 @@ Last Generated: ${new Date().toLocaleString()}
   const cardBg = colors.bgCard;
   const textColor = colors.text;
   const headerBg = colors.bgHeader;
-  const navBg = darkMode ? '#1e293b' : '#e2e8f0';
+  const navBg = colors.bgNav;
   const borderColor = colors.border;
 
   // Reusable style helpers
@@ -2954,7 +2984,7 @@ Last Generated: ${new Date().toLocaleString()}
       danger: { background: colors.danger + '20', color: colors.danger, borderColor: colors.danger },
       warning: { background: colors.warning + '20', color: colors.warning, borderColor: colors.warning },
       info: { background: colors.primary + '20', color: colors.primary, borderColor: colors.primary },
-      gold: { background: '#b8860b30', color: '#b8860b', borderColor: '#b8860b' },
+      gold: { background: colors.gold + '30', color: colors.gold, borderColor: colors.gold },
       silver: { background: colors.silver + '30', color: colors.silver, borderColor: colors.silver },
       bronze: { background: colors.bronze + '30', color: colors.bronze, borderColor: colors.bronze }
     };
@@ -3078,7 +3108,7 @@ Last Generated: ${new Date().toLocaleString()}
           }
         }
       `}</style>
-      <header style={{ background: headerBg, color: colors.textInverse, padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: shadows.md, borderBottom: '2px solid #b8860b' }}>
+      <header style={{ background: headerBg, color: colors.textInverse, padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: shadows.md, borderBottom: `3px solid ${colors.gold}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img 
             src="data:image/png;base64,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"
@@ -3225,14 +3255,14 @@ Last Generated: ${new Date().toLocaleString()}
       {viewingArchivedSeason && (
         <div style={{ background: '#fffacd', border: '2px solid #ffc107', padding: '12px 20px', textAlign: 'center', fontWeight: 'bold', color: '#856404' }}>
           📚 Viewing Archived Season: {archivedSeasons.find(s => s.key === currentSeason)?.name} - READ ONLY
-          <button onClick={() => setCurrentSeason('active')} style={{ marginLeft: '15px', padding: '4px 12px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
+          <button onClick={() => setCurrentSeason('active')} style={{ marginLeft: '15px', padding: '4px 12px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
             Return to Current Season
           </button>
         </div>
       )}
 
       {showRoleBanner && currentRole !== 'viewer' && (
-        <div style={{ background: currentRole === 'coach' ? '#e7f3ff' : currentRole === 'official' ? '#d4edda' : '#fff3cd', border: `2px solid ${currentRole === 'coach' ? '#007bff' : currentRole === 'official' ? '#28a745' : '#ffc107'}`, padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', color: currentRole === 'coach' ? '#004085' : currentRole === 'official' ? '#155724' : '#856404' }}>
+        <div style={{ background: currentRole === 'coach' ? '#e7f3ff' : currentRole === 'official' ? '#d4edda' : '#fff3cd', border: `2px solid ${currentRole === 'coach' ? colors.primary : currentRole === 'official' ? colors.success : colors.warning}`, padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', color: currentRole === 'coach' ? '#004085' : currentRole === 'official' ? '#155724' : '#856404' }}>
           <span>
             {currentRole === 'coach' && `👔 Logged in as Coach - Managing: ${coachTeam}`}
             {currentRole === 'official' && `⚙️ Logged in as Official${officialName ? ` - ${officialName}` : ''}`}
@@ -3268,7 +3298,7 @@ Last Generated: ${new Date().toLocaleString()}
                       📢 Announcements
                     </h4>
                     {isOfficial && !editingAnnouncements && (
-                      <button onClick={() => setEditingAnnouncements(true)} style={{ padding: '4px 10px', background: '#ffc107', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '11px' }}>
+                      <button onClick={() => setEditingAnnouncements(true)} style={{ padding: '4px 10px', background: colors.warning, color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '11px' }}>
                         Edit
                       </button>
                     )}
@@ -3282,10 +3312,10 @@ Last Generated: ${new Date().toLocaleString()}
                         style={{ flex: 1, width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ffc107', fontSize: '13px', fontFamily: 'inherit', resize: 'none' }}
                       />
                       <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                        <button onClick={() => { saveAnnouncements(announcements); setEditingAnnouncements(false); }} style={{ padding: '6px 12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                        <button onClick={() => { saveAnnouncements(announcements); setEditingAnnouncements(false); }} style={{ padding: '6px 12px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
                           Save
                         </button>
-                        <button onClick={() => { setAnnouncements(data.announcements || ''); setEditingAnnouncements(false); }} style={{ padding: '6px 12px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                        <button onClick={() => { setAnnouncements(data.announcements || ''); setEditingAnnouncements(false); }} style={{ padding: '6px 12px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
                           Cancel
                         </button>
                       </div>
@@ -3353,7 +3383,7 @@ Last Generated: ${new Date().toLocaleString()}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto', flex: 1 }}>
                       {[...data.athletes].sort((a, b) => b.stats.pointsFor - a.stats.pointsFor).slice(0, 5).map((athlete, idx) => {
                         const team = data.teams.find(t => t.athleteIds.includes(athlete.id));
-                        let badgeColor = '#6c757d';
+                        let badgeColor = colors.neutral;
                         if (idx === 0) badgeColor = '#ffd700';
                         else if (idx === 1) badgeColor = '#c0c0c0';
                         else if (idx === 2) badgeColor = '#cd7f32';
@@ -3371,7 +3401,7 @@ Last Generated: ${new Date().toLocaleString()}
                                 </div>
                               </div>
                               <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#007bff' }}>{athlete.stats.pointsFor}</div>
+                                <div style={{ fontWeight: 'bold', fontSize: '16px', color: colors.primary }}>{athlete.stats.pointsFor}</div>
                                 <div style={{ fontSize: '10px', color: '#666' }}>points</div>
                               </div>
                             </div>
@@ -3391,7 +3421,7 @@ Last Generated: ${new Date().toLocaleString()}
                       📢 Official Announcements
                     </h4>
                     {isOfficial && !editingAnnouncements && (
-                      <button onClick={() => setEditingAnnouncements(true)} style={{ padding: '6px 12px', background: '#ffc107', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                      <button onClick={() => setEditingAnnouncements(true)} style={{ padding: '6px 12px', background: colors.warning, color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
                         Edit
                       </button>
                     )}
@@ -3405,10 +3435,10 @@ Last Generated: ${new Date().toLocaleString()}
                         style={{ width: '100%', minHeight: '100px', padding: '10px', borderRadius: '6px', border: '1px solid #ffc107', fontSize: '14px', fontFamily: 'inherit', resize: 'vertical' }}
                       />
                       <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                        <button onClick={() => { saveAnnouncements(announcements); setEditingAnnouncements(false); }} style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                        <button onClick={() => { saveAnnouncements(announcements); setEditingAnnouncements(false); }} style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
                           Save
                         </button>
-                        <button onClick={() => { setAnnouncements(data.announcements || ''); setEditingAnnouncements(false); }} style={{ padding: '8px 16px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                        <button onClick={() => { setAnnouncements(data.announcements || ''); setEditingAnnouncements(false); }} style={{ padding: '8px 16px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
                           Cancel
                         </button>
                       </div>
@@ -3438,11 +3468,11 @@ Last Generated: ${new Date().toLocaleString()}
                       <div key={idx} style={{ background: cardBg, borderRadius: '10px', padding: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', border: `2px solid #007bff` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px' }}>
                           <div>
-                            <h5 style={{ margin: '0 0 5px 0', color: '#007bff' }}>{tournament.name}</h5>
+                            <h5 style={{ margin: '0 0 5px 0', color: colors.primary }}>{tournament.name}</h5>
                             <div style={{ fontSize: '13px', color: '#666' }}>Weight: {tournament.weight}</div>
                             <div style={{ fontSize: '13px', color: '#666' }}>Round {tournament.rounds.length}</div>
                           </div>
-                          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#007bff' }}>
+                          <div style={{ fontSize: '24px', fontWeight: 'bold', color: colors.primary }}>
                             {completionPercent}%
                           </div>
                         </div>
@@ -3452,10 +3482,10 @@ Last Generated: ${new Date().toLocaleString()}
                             <span>{completedMatches} / {totalMatches} matches</span>
                           </div>
                           <div style={{ background: darkMode ? '#444' : '#e0e0e0', borderRadius: '10px', height: '20px', overflow: 'hidden' }}>
-                            <div style={{ background: '#007bff', height: '100%', width: `${completionPercent}%`, transition: 'width 0.3s' }}></div>
+                            <div style={{ background: colors.primary, height: '100%', width: `${completionPercent}%`, transition: 'width 0.3s' }}></div>
                           </div>
                         </div>
-                        <div style={{ fontSize: '12px', color: pendingMatches > 0 ? '#ffc107' : '#28a745', fontWeight: 'bold' }}>
+                        <div style={{ fontSize: '12px', color: pendingMatches > 0 ? colors.warning : colors.success, fontWeight: 'bold' }}>
                           {pendingMatches > 0 ? `${pendingMatches} matches pending` : 'Round complete!'}
                         </div>
                       </div>
@@ -3477,7 +3507,7 @@ Last Generated: ${new Date().toLocaleString()}
                 <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: colors.success }}>{data.athletes.length}</div>
                 <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>ATHLETES</div>
               </div>
-              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid #b8860b`, position: 'relative', overflow: 'hidden' }}>
+              <div style={{ ...cardStyles.base, textAlign: 'center', borderLeft: `4px solid ${colors.gold}`, position: 'relative', overflow: 'hidden' }}>
                 <div style={{ fontSize: '36px', marginBottom: '8px' }}>🎖️</div>
                 <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.extrabold, color: '#b8860b' }}>{data.athletes.filter(a => a.isCoach).length}</div>
                 <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: spacing.sm, fontWeight: typography.fontWeight.bold, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>COACHES</div>
@@ -3509,7 +3539,7 @@ Last Generated: ${new Date().toLocaleString()}
                     const maxPoints = teamPoints[0]?.points || 1;
                     const barHeight = (team.points / maxPoints) * 200;
                     const rank = idx + 1;
-                    let color = '#6c757d';
+                    let color = colors.neutral;
                     if (rank === 1) color = '#ffd700';
                     else if (rank === 2) color = '#c0c0c0';
                     else if (rank === 3) color = '#cd7f32';
@@ -3601,8 +3631,8 @@ Last Generated: ${new Date().toLocaleString()}
                   {editingTeam === actualIndex ? (
                     <div style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
                       <input value={editTeamName} onChange={(e) => setEditTeamName(e.target.value)} style={{ padding: '6px', borderRadius: '4px', border: `1px solid ${borderColor}`, flex: 1, background: cardBg, color: textColor }} />
-                      <button onClick={() => saveEditTeam(actualIndex)} style={{ padding: '4px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Save</button>
-                      <button onClick={() => setEditingTeam(null)} style={{ padding: '4px 8px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Cancel</button>
+                      <button onClick={() => saveEditTeam(actualIndex)} style={{ padding: '4px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Save</button>
+                      <button onClick={() => setEditingTeam(null)} style={{ padding: '4px 8px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Cancel</button>
                     </div>
                   ) : (
                     <div onClick={() => setExpandedTeam(expandedTeam === actualIndex ? null : actualIndex)} style={{ fontWeight: 'bold', cursor: 'pointer', flex: 1, display: 'flex', justifyContent: 'space-between' }}>
@@ -3617,13 +3647,13 @@ Last Generated: ${new Date().toLocaleString()}
                           e.stopPropagation();
                           printTeamRoster(team.name);
                         }} 
-                        style={{ padding: '4px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        style={{ padding: '4px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
                         title="Print Team Roster"
                       >
                         🖨️ Print
                       </button>
                       {canEditThisTeam && (
-                        <button onClick={() => startEditTeam(actualIndex, team.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px' }}>
+                        <button onClick={() => startEditTeam(actualIndex, team.name)} style={{ padding: '4px 8px', background: colors.info, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px', fontSize: '12px' }}>
                           <Edit2 size={14} />
                         </button>
                       )}
@@ -3640,7 +3670,7 @@ Last Generated: ${new Date().toLocaleString()}
                               newData.teams.splice(i, 1);
                               saveData(newData);
                             }
-                          }} style={{ padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px', fontSize: '12px' }}>
+                          }} style={{ padding: '6px 12px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px', fontSize: '12px' }}>
                             Delete Team
                           </button>
                         )}
@@ -3657,20 +3687,20 @@ Last Generated: ${new Date().toLocaleString()}
                                       <input type="checkbox" checked={editAthleteIsCoach} onChange={(e) => setEditAthleteIsCoach(e.target.checked)} />
                                       Coach
                                     </label>
-                                    <button onClick={() => saveEditAthlete(id)} style={{ padding: '4px 6px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px' }}>Save</button>
-                                    <button onClick={() => setEditingAthlete(null)} style={{ padding: '4px 6px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px' }}>Cancel</button>
+                                    <button onClick={() => saveEditAthlete(id)} style={{ padding: '4px 6px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px' }}>Save</button>
+                                    <button onClick={() => setEditingAthlete(null)} style={{ padding: '4px 6px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px' }}>Cancel</button>
                                   </div>
                                 ) : (
                                   <>
-                                    <span onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', color: '#007bff', textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1, fontSize: '13px', flex: 1 }}>
+                                    <span onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', color: colors.primary, textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1, fontSize: '13px', flex: 1 }}>
                                       {athlete?.name} {athlete?.isCoach ? '👔' : ''} {athlete?.injured && '🤕'}
                                     </span>
                                     {canEditThisTeam && (
                                       <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                                        <button onClick={() => toggleInjured(id)} style={{ padding: '2px 6px', background: athlete?.injured ? '#28a745' : '#ffc107', color: athlete?.injured ? 'white' : 'black', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
+                                        <button onClick={() => toggleInjured(id)} style={{ padding: '2px 6px', background: athlete?.injured ? colors.success : colors.warning, color: athlete?.injured ? 'white' : 'black', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
                                           {athlete?.injured ? 'Heal' : 'Injure'}
                                         </button>
-                                        <button onClick={() => startEditAthlete(id, athlete.name, athlete.weight, athlete.isCoach)} style={{ padding: '2px 6px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
+                                        <button onClick={() => startEditAthlete(id, athlete.name, athlete.weight, athlete.isCoach)} style={{ padding: '2px 6px', background: colors.info, color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
                                           <Edit2 size={12} />
                                         </button>
                                       </div>
@@ -3751,7 +3781,7 @@ Last Generated: ${new Date().toLocaleString()}
                           LIFETIME
                         </div>
                       )}
-                      <h4 style={{ margin: '0 0 10px 0', color: '#007bff' }}>{athlete.name} {athlete.isCoach && '(Coach)'} {athlete.injured && '(Injured)'}</h4>
+                      <h4 style={{ margin: '0 0 10px 0', color: colors.primary }}>{athlete.name} {athlete.isCoach && '(Coach)'} {athlete.injured && '(Injured)'}</h4>
                       <div style={{ fontSize: '14px', marginBottom: '8px' }}><strong>Team:</strong> {team?.name || 'N/A'}</div>
                       <div style={{ fontSize: '14px', marginBottom: '8px' }}><strong>Weight:</strong> {athlete.weight} lbs</div>
                       <div style={{ fontSize: '14px', marginBottom: '8px' }}><strong>Record:</strong> {totalWins}-{totalLosses}</div>
@@ -3777,7 +3807,7 @@ Last Generated: ${new Date().toLocaleString()}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
               <h3>Weight Classes</h3>
               {isOfficial && (
-                <button onClick={() => setShowAddWeightClass(true)} style={{ padding: '8px 14px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button onClick={() => setShowAddWeightClass(true)} style={{ padding: '8px 14px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Plus size={16} /> Add Weight Class
                 </button>
               )}
@@ -3787,8 +3817,8 @@ Last Generated: ${new Date().toLocaleString()}
               <div style={{ background: cardBg, borderRadius: '10px', padding: '15px', marginBottom: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
                 <h4>Create New Weight Class</h4>
                 <input value={newWeightClassName} onChange={(e) => setNewWeightClassName(e.target.value)} placeholder="Weight class name (e.g., 150-160 or Lightweight)" style={{ padding: '8px', marginRight: '8px', borderRadius: '4px', border: `1px solid ${borderColor}`, width: '250px', background: cardBg, color: textColor }} />
-                <button onClick={addWeightClass} style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', marginRight: '8px' }}>Create</button>
-                <button onClick={() => { setShowAddWeightClass(false); setNewWeightClassName(''); }} style={{ padding: '8px 14px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
+                <button onClick={addWeightClass} style={{ padding: '8px 14px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', marginRight: '8px' }}>Create</button>
+                <button onClick={() => { setShowAddWeightClass(false); setNewWeightClassName(''); }} style={{ padding: '8px 14px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
               </div>
             )}
 
@@ -3801,8 +3831,8 @@ Last Generated: ${new Date().toLocaleString()}
                   {editingWeightClass === i ? (
                     <div style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
                       <input value={editWeightClassName} onChange={(e) => setEditWeightClassName(e.target.value)} style={{ padding: '6px', borderRadius: '4px', border: `1px solid ${borderColor}`, flex: 1, background: cardBg, color: textColor }} />
-                      <button onClick={() => saveEditWeightClass(i)} style={{ padding: '4px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Save</button>
-                      <button onClick={() => setEditingWeightClass(null)} style={{ padding: '4px 8px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Cancel</button>
+                      <button onClick={() => saveEditWeightClass(i)} style={{ padding: '4px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Save</button>
+                      <button onClick={() => setEditingWeightClass(null)} style={{ padding: '4px 8px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Cancel</button>
                     </div>
                   ) : (
                     <>
@@ -3812,10 +3842,10 @@ Last Generated: ${new Date().toLocaleString()}
                       </div>
                       {isOfficial && (
                         <div style={{ display: 'flex', gap: '8px', marginLeft: '10px' }}>
-                          <button onClick={() => startEditWeightClass(i, weightClass.name)} style={{ padding: '4px 8px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
+                          <button onClick={() => startEditWeightClass(i, weightClass.name)} style={{ padding: '4px 8px', background: colors.info, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
                             <Edit2 size={14} />
                           </button>
-                          <button onClick={() => deleteWeightClass(i)} style={{ padding: '4px 8px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
+                          <button onClick={() => deleteWeightClass(i)} style={{ padding: '4px 8px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
                             Delete
                           </button>
                         </div>
@@ -3830,7 +3860,7 @@ Last Generated: ${new Date().toLocaleString()}
                     ) : (
                       weightClass.athleteIds.map(id => {
                         const athlete = data.athletes.find(a => a.id === id);
-                        return <li key={id} onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', padding: '4px 0', color: '#007bff', textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1 }}>{athlete?.name} - {athlete?.weight} lbs {athlete?.isCoach ? '(Coach)' : ''} {athlete?.injured && '(Injured)'}</li>;
+                        return <li key={id} onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', padding: '4px 0', color: colors.primary, textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1 }}>{athlete?.name} - {athlete?.weight} lbs {athlete?.isCoach ? '(Coach)' : ''} {athlete?.injured && '(Injured)'}</li>;
                       })
                     )}
                   </ul>
@@ -3894,8 +3924,8 @@ Last Generated: ${new Date().toLocaleString()}
                     <input type="number" value={tournamentDay} onChange={(e) => setTournamentDay(e.target.value)} placeholder="Day (1-31)" min="1" max="31" style={{ padding: '8px', borderRadius: '4px', border: `1px solid ${borderColor}`, flex: 1, background: cardBg, color: textColor }} />
                   </div>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <button onClick={createTournament} style={{ padding: '8px 14px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Start (Random Seeding)</button>
-                    <button onClick={() => tournamentWeight && startSeeding(tournamentWeight)} disabled={!tournamentWeight} style={{ padding: '8px 14px', background: tournamentWeight ? '#17a2b8' : '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: tournamentWeight ? 'pointer' : 'not-allowed', flex: 1 }}>Manual Seeding</button>
+                    <button onClick={createTournament} style={{ padding: '8px 14px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Start (Random Seeding)</button>
+                    <button onClick={() => tournamentWeight && startSeeding(tournamentWeight)} disabled={!tournamentWeight} style={{ padding: '8px 14px', background: tournamentWeight ? colors.info : colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: tournamentWeight ? 'pointer' : 'not-allowed', flex: 1 }}>Manual Seeding</button>
                   </div>
                 </div>
               </div>
@@ -3911,18 +3941,18 @@ Last Generated: ${new Date().toLocaleString()}
                     <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px', background: darkMode ? '#3d3d3d' : '#f9f9f9', marginBottom: '4px', borderRadius: '4px' }}>
                       <span style={{ fontWeight: 'bold', minWidth: '30px' }}>#{idx + 1}</span>
                       <span style={{ flex: 1 }}>{athlete?.name}</span>
-                      <button onClick={() => moveAthleteUp(idx)} disabled={idx === 0} style={{ padding: '4px 8px', background: idx === 0 ? '#6c757d' : '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
+                      <button onClick={() => moveAthleteUp(idx)} disabled={idx === 0} style={{ padding: '4px 8px', background: idx === 0 ? colors.neutral : colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
                         <ChevronUp size={14} />
                       </button>
-                      <button onClick={() => moveAthleteDown(idx)} disabled={idx === seedingAthletes.length - 1} style={{ padding: '4px 8px', background: idx === seedingAthletes.length - 1 ? '#6c757d' : '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: idx === seedingAthletes.length - 1 ? 'not-allowed' : 'pointer' }}>
+                      <button onClick={() => moveAthleteDown(idx)} disabled={idx === seedingAthletes.length - 1} style={{ padding: '4px 8px', background: idx === seedingAthletes.length - 1 ? colors.neutral : colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: idx === seedingAthletes.length - 1 ? 'not-allowed' : 'pointer' }}>
                         <ChevronDown size={14} />
                       </button>
                     </div>
                   );
                 })}
                 <div style={{ marginTop: '15px', display: 'flex', gap: '8px' }}>
-                  <button onClick={confirmSeeding} style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Confirm & Start Tournament</button>
-                  <button onClick={() => { setSeedingMode(null); setSeedingAthletes([]); }} style={{ padding: '8px 14px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
+                  <button onClick={confirmSeeding} style={{ padding: '8px 14px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Confirm & Start Tournament</button>
+                  <button onClick={() => { setSeedingMode(null); setSeedingAthletes([]); }} style={{ padding: '8px 14px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
                 </div>
               </div>
             )}
@@ -3983,7 +4013,7 @@ Last Generated: ${new Date().toLocaleString()}
                           <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>Date: {formatMilitaryDate(tournament.date.year, tournament.date.month, tournament.date.day)}</p>
                           {tournament.officials && <p style={{ fontSize: '13px', color: '#666', margin: '5px 0 0 0' }}>Officials: {tournament.officials}</p>}
                           {tournament.managedBy && (
-                            <p style={{ fontSize: '13px', color: '#007bff', fontWeight: 'bold', margin: '5px 0 0 0' }}>
+                            <p style={{ fontSize: '13px', color: colors.primary, fontWeight: 'bold', margin: '5px 0 0 0' }}>
                               ⚙️ Managed by: {tournament.managedBy}
                             </p>
                           )}
@@ -3992,12 +4022,12 @@ Last Generated: ${new Date().toLocaleString()}
                           <div style={{ marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                             <button 
                               onClick={() => printBracket(actualIndex)} 
-                              style={{ padding: '6px 12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                              style={{ padding: '6px 12px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
                             >
                               🖨️ Print Bracket
                             </button>
                             {isOfficial && activeAthletes.length > 0 && (
-                              <button onClick={() => setShowRemoveAthleteMenu(showRemoveAthleteMenu === actualIndex ? null : actualIndex)} style={{ padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <button onClick={() => setShowRemoveAthleteMenu(showRemoveAthleteMenu === actualIndex ? null : actualIndex)} style={{ padding: '6px 12px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <UserMinus size={14} /> Remove Athlete
                               </button>
                             )}
@@ -4007,7 +4037,7 @@ Last Generated: ${new Date().toLocaleString()}
                             <div style={{ marginTop: '10px', padding: '10px', background: darkMode ? '#3d3d3d' : '#f9f9f9', borderRadius: '4px' }}>
                               <p style={{ fontSize: '12px', marginBottom: '8px' }}>Select athlete to remove (opponent auto-advances):</p>
                               {activeAthletes.map(({ id, athlete }) => (
-                                <button key={id} onClick={() => removeAthleteFromTournament(actualIndex, id)} style={{ width: '100%', padding: '6px', marginBottom: '4px', background: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', textAlign: 'left' }}>
+                                <button key={id} onClick={() => removeAthleteFromTournament(actualIndex, id)} style={{ width: '100%', padding: '6px', marginBottom: '4px', background: colors.warning, color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', textAlign: 'left' }}>
                                   {athlete?.name}
                                 </button>
                               ))}
@@ -4032,42 +4062,42 @@ Last Generated: ${new Date().toLocaleString()}
                                           {/* Quick Decision Buttons */}
                                           <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                             <div style={{ display: 'flex', gap: '4px' }}>
-                                              <button onClick={() => setShowPositionScoring(showPositionScoring === matchKey ? null : `${matchKey}-A-points`)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: showPositionScoring === `${matchKey}-A-points` ? '#28a745' : 'white', color: showPositionScoring === `${matchKey}-A-points` ? 'white' : 'black', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}>{athleteA?.name} P</button>
-                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteA, 'submission', 0, matchNotes)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{athleteA?.name} S</button>
+                                              <button onClick={() => setShowPositionScoring(showPositionScoring === matchKey ? null : `${matchKey}-A-points`)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: showPositionScoring === `${matchKey}-A-points` ? colors.success : 'white', color: showPositionScoring === `${matchKey}-A-points` ? 'white' : 'black', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}>{athleteA?.name} P</button>
+                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteA, 'submission', 0, matchNotes)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{athleteA?.name} S</button>
                                             </div>
                                             <div style={{ display: 'flex', gap: '4px' }}>
-                                              <button onClick={() => setShowPositionScoring(showPositionScoring === matchKey ? null : `${matchKey}-B-points`)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: showPositionScoring === `${matchKey}-B-points` ? '#28a745' : 'white', color: showPositionScoring === `${matchKey}-B-points` ? 'white' : 'black', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}>{athleteB?.name} P</button>
-                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteB, 'submission', 0, matchNotes)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{athleteB?.name} S</button>
+                                              <button onClick={() => setShowPositionScoring(showPositionScoring === matchKey ? null : `${matchKey}-B-points`)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: showPositionScoring === `${matchKey}-B-points` ? colors.success : 'white', color: showPositionScoring === `${matchKey}-B-points` ? 'white' : 'black', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}>{athleteB?.name} P</button>
+                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteB, 'submission', 0, matchNotes)} style={{ flex: 1, padding: '4px', fontSize: '11px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>{athleteB?.name} S</button>
                                             </div>
                                           </div>
 
                                           {/* Position Scoring Menu */}
                                           {(showPositionScoring === `${matchKey}-A-points` || showPositionScoring === `${matchKey}-B-points`) && (
                                             <div style={{ marginTop: '8px', padding: '10px', background: darkMode ? '#2d2d2d' : '#f0f0f0', borderRadius: '6px', border: '2px solid #28a745' }}>
-                                              <p style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', color: '#28a745' }}>Position Points</p>
+                                              <p style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', color: colors.success }}>Position Points</p>
                                               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '10px' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                   <span style={{ fontSize: '11px' }}>Side Mount (+2):</span>
                                                   <div style={{ display: 'flex', gap: '4px' }}>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, sideMount: Math.max(0, prev.sideMount - 1) }))} style={{ padding: '2px 8px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, sideMount: Math.max(0, prev.sideMount - 1) }))} style={{ padding: '2px 8px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
                                                     <span style={{ minWidth: '20px', textAlign: 'center', fontWeight: 'bold' }}>{positionPoints.sideMount}</span>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, sideMount: prev.sideMount + 1 }))} style={{ padding: '2px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, sideMount: prev.sideMount + 1 }))} style={{ padding: '2px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
                                                   </div>
                                                 </div>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                   <span style={{ fontSize: '11px' }}>Top Mount (+4):</span>
                                                   <div style={{ display: 'flex', gap: '4px' }}>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, topMount: Math.max(0, prev.topMount - 1) }))} style={{ padding: '2px 8px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, topMount: Math.max(0, prev.topMount - 1) }))} style={{ padding: '2px 8px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
                                                     <span style={{ minWidth: '20px', textAlign: 'center', fontWeight: 'bold' }}>{positionPoints.topMount}</span>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, topMount: prev.topMount + 1 }))} style={{ padding: '2px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, topMount: prev.topMount + 1 }))} style={{ padding: '2px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
                                                   </div>
                                                 </div>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                   <span style={{ fontSize: '11px' }}>Back Mount (+4):</span>
                                                   <div style={{ display: 'flex', gap: '4px' }}>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, backMount: Math.max(0, prev.backMount - 1) }))} style={{ padding: '2px 8px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, backMount: Math.max(0, prev.backMount - 1) }))} style={{ padding: '2px 8px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>-</button>
                                                     <span style={{ minWidth: '20px', textAlign: 'center', fontWeight: 'bold' }}>{positionPoints.backMount}</span>
-                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, backMount: prev.backMount + 1 }))} style={{ padding: '2px 8px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
+                                                    <button onClick={() => setPositionPoints(prev => ({ ...prev, backMount: prev.backMount + 1 }))} style={{ padding: '2px 8px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>+</button>
                                                   </div>
                                                 </div>
                                               </div>
@@ -4084,7 +4114,7 @@ Last Generated: ${new Date().toLocaleString()}
                                                     const winnerId = showPositionScoring === `${matchKey}-A-points` ? match.athleteA : match.athleteB;
                                                     decideMatch(actualIndex, ri, mi, winnerId, 'points', totalPositionPoints, matchNotes);
                                                   }}
-                                                  style={{ width: '100%', padding: '6px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                                                  style={{ width: '100%', padding: '6px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
                                                 >
                                                   Confirm Win by Points
                                                 </button>
@@ -4108,16 +4138,16 @@ Last Generated: ${new Date().toLocaleString()}
                                           </div>
 
                                           {/* No Show Button */}
-                                          <button onClick={() => setShowNoShowMenu(showNoShowMenu === matchKey ? null : matchKey)} style={{ marginTop: '8px', padding: '4px 8px', background: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                                          <button onClick={() => setShowNoShowMenu(showNoShowMenu === matchKey ? null : matchKey)} style={{ marginTop: '8px', padding: '4px 8px', background: colors.warning, color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
                                             <UserX size={14} /> No Show
                                           </button>
                                           {showNoShowMenu === matchKey && (
                                             <div style={{ marginTop: '8px', padding: '8px', background: darkMode ? '#2d2d2d' : '#f0f0f0', borderRadius: '4px' }}>
                                               <p style={{ fontSize: '11px', marginBottom: '6px' }}>Who didn't show?</p>
-                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteB, 'noshow')} style={{ width: '100%', padding: '6px', marginBottom: '4px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>
+                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteB, 'noshow')} style={{ width: '100%', padding: '6px', marginBottom: '4px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>
                                                 {athleteA?.name} (No Show)
                                               </button>
-                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteA, 'noshow')} style={{ width: '100%', padding: '6px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>
+                                              <button onClick={() => decideMatch(actualIndex, ri, mi, match.athleteA, 'noshow')} style={{ width: '100%', padding: '6px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}>
                                                 {athleteB?.name} (No Show)
                                               </button>
                                             </div>
@@ -4128,7 +4158,7 @@ Last Generated: ${new Date().toLocaleString()}
                                       <>
                                         <div style={{ marginTop: '6px', fontSize: '13px' }}>
                                           <strong>Winner:</strong> {data.athletes.find(a => a.id === match.winner)?.name || 'BYE'} ({match.method === 'noshow' ? 'No Show' : match.method === 'walkover' ? 'Walkover' : match.method})
-                                          {match.positionPoints > 0 && <span style={{ color: '#28a745', fontWeight: 'bold' }}> +{match.positionPoints} position pts</span>}
+                                          {match.positionPoints > 0 && <span style={{ color: colors.success, fontWeight: 'bold' }}> +{match.positionPoints} position pts</span>}
                                         </div>
                                         {match.notes && (
                                           <div style={{ marginTop: '4px', fontSize: '11px', color: '#666', fontStyle: 'italic', padding: '4px', background: darkMode ? '#3d3d3d' : '#f9f9f9', borderRadius: '4px' }}>
@@ -4136,7 +4166,7 @@ Last Generated: ${new Date().toLocaleString()}
                                           </div>
                                         )}
                                         {isOfficial && isLastDecision && (
-                                          <button onClick={undoLastAction} style={{ marginTop: '8px', padding: '4px 8px', background: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                          <button onClick={undoLastAction} style={{ marginTop: '8px', padding: '4px 8px', background: colors.warning, color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                             <Undo size={12} /> Undo
                                           </button>
                                         )}
@@ -4175,7 +4205,7 @@ Last Generated: ${new Date().toLocaleString()}
                   <option value="">All Days</option>
                   {days.map(d => <option key={d} value={d}>{d}</option>)}
                 </select>
-                <button onClick={() => { setFilterYear(''); setFilterMonth(''); setFilterDay(''); }} style={{ padding: '8px 14px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Clear</button>
+                <button onClick={() => { setFilterYear(''); setFilterMonth(''); setFilterDay(''); }} style={{ padding: '8px 14px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Clear</button>
               </div>
             </div>
             {completedTournaments.length === 0 ? (
@@ -4188,16 +4218,16 @@ Last Generated: ${new Date().toLocaleString()}
                     <p style={{ fontSize: '13px', color: '#666' }}>Date: {formatMilitaryDate(tournament.date.year, tournament.date.month, tournament.date.day)}</p>
                     {tournament.officials && <p style={{ fontSize: '13px', color: '#666' }}>Officials: {tournament.officials}</p>}
                     {tournament.managedBy && (
-                      <p style={{ fontSize: '13px', color: '#007bff', fontWeight: 'bold' }}>
+                      <p style={{ fontSize: '13px', color: colors.primary, fontWeight: 'bold' }}>
                         ⚙️ Managed by: {tournament.managedBy}
                       </p>
                     )}
                     <div><strong>Champion:</strong> {data.athletes.find(a => a.id === tournament.champ)?.name}</div>
-                    <p style={{ fontSize: '12px', color: '#007bff', marginTop: '8px' }}>Click to view full results</p>
+                    <p style={{ fontSize: '12px', color: colors.primary, marginTop: '8px' }}>Click to view full results</p>
                   </div>
                   <button 
                     onClick={(e) => { e.stopPropagation(); printBracket(data.tournaments.indexOf(tournament)); }} 
-                    style={{ marginTop: '10px', padding: '6px 12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    style={{ marginTop: '10px', padding: '6px 12px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
                   >
                     🖨️ Print Bracket
                   </button>
@@ -4302,7 +4332,7 @@ Last Generated: ${new Date().toLocaleString()}
               </div>
               <button 
                 onClick={() => setAnalyticsFilter({ type: 'team', id: '', startDate: '', endDate: '' })}
-                style={{ marginTop: '15px', padding: '8px 16px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ marginTop: '15px', padding: '8px 16px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
               >
                 Clear Filters
               </button>
@@ -4415,10 +4445,10 @@ Last Generated: ${new Date().toLocaleString()}
                               <div key={idx}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '13px' }}>
                                   <span style={{ fontWeight: 'bold' }}>{item.name}</span>
-                                  <span style={{ color: '#007bff' }}>{item.points} pts</span>
+                                  <span style={{ color: colors.primary }}>{item.points} pts</span>
                                 </div>
                                 <div style={{ background: darkMode ? '#444' : '#e0e0e0', borderRadius: '10px', height: '24px', overflow: 'hidden' }}>
-                                  <div style={{ background: '#007bff', height: '100%', width: `${percentage}%`, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '8px', color: 'white', fontSize: '11px', fontWeight: 'bold', transition: 'width 0.3s' }}>
+                                  <div style={{ background: colors.primary, height: '100%', width: `${percentage}%`, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '8px', color: 'white', fontSize: '11px', fontWeight: 'bold', transition: 'width 0.3s' }}>
                                     {percentage > 15 && `${item.points} pts`}
                                   </div>
                                 </div>
@@ -4457,10 +4487,10 @@ Last Generated: ${new Date().toLocaleString()}
                                   <tr key={idx} style={{ borderBottom: `1px solid ${borderColor}` }}>
                                     <td style={{ padding: '12px' }}>{item.name}</td>
                                     {analyticsFilter.type === 'all' && <td style={{ padding: '12px' }}>{item.team}</td>}
-                                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 'bold', color: '#007bff' }}>{item.points}</td>
+                                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 'bold', color: colors.primary }}>{item.points}</td>
                                     <td style={{ padding: '12px', textAlign: 'center' }}>{item.wins}</td>
                                     <td style={{ padding: '12px', textAlign: 'center' }}>{item.losses}</td>
-                                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 'bold', color: winRate >= 50 ? '#28a745' : '#dc3545' }}>
+                                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 'bold', color: winRate >= 50 ? colors.success : colors.danger }}>
                                       {winRate}%
                                     </td>
                                     {analyticsFilter.type === 'team' && analyticsFilter.id && (
@@ -4521,7 +4551,7 @@ Last Generated: ${new Date().toLocaleString()}
                         showToastNotification(`Season renamed to "${trimmedName}"`, 'success');
                       }
                     }}
-                    style={{ padding: '4px 12px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                    style={{ padding: '4px 12px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                   >
                     Edit Name
                   </button>
@@ -4544,7 +4574,7 @@ Last Generated: ${new Date().toLocaleString()}
                     archiveCurrentSeason(archiveName.trim());
                   }
                 }}
-                style={{ width: '100%', padding: '12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '15px' }}
+                style={{ width: '100%', padding: '12px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', marginBottom: '15px' }}
               >
                 📦 Archive Current Season & Start Fresh
               </button>
@@ -4564,7 +4594,7 @@ Last Generated: ${new Date().toLocaleString()}
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button 
                             onClick={() => setCurrentSeason(season.key)}
-                            style={{ padding: '6px 12px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                           >
                             View
                           </button>
@@ -4577,7 +4607,7 @@ Last Generated: ${new Date().toLocaleString()}
                                 localStorage.setItem(`grappling_${currentRegiment}_archived_list`, JSON.stringify(newArchived));
                               }
                             }}
-                            style={{ padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                           >
                             Delete
                           </button>
@@ -4598,7 +4628,7 @@ Last Generated: ${new Date().toLocaleString()}
               
               <div style={{ background: darkMode ? '#3d3d3d' : '#f9f9f9', padding: '15px', borderRadius: '8px', marginBottom: '15px', border: '2px solid #ffc107' }}>
                 <div style={{ fontSize: '12px', color: '#666', marginBottom: '5px' }}>Master Recovery Key:</div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold', fontFamily: 'monospace', color: '#007bff', letterSpacing: '1px', marginBottom: '10px' }}>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', fontFamily: 'monospace', color: colors.primary, letterSpacing: '1px', marginBottom: '10px' }}>
                   {MASTER_RECOVERY_KEY}
                 </div>
                 <div style={{ fontSize: '12px', color: '#666', lineHeight: '1.5' }}>
@@ -4612,13 +4642,13 @@ Last Generated: ${new Date().toLocaleString()}
                     navigator.clipboard.writeText(MASTER_RECOVERY_KEY);
                     alert('Master Recovery Key copied to clipboard!');
                   }}
-                  style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '8px 16px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
                 >
                   📋 Copy Key
                 </button>
                 <button 
                   onClick={() => setShowMasterKeyInfo(true)}
-                  style={{ padding: '8px 16px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '8px 16px', background: colors.info, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
                 >
                   ℹ️ View Full Info
                 </button>
@@ -4663,7 +4693,7 @@ Last Generated: ${new Date().toLocaleString()}
                     `);
                     printWindow.document.close();
                   }}
-                  style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}
                 >
                   🖨️ Print Recovery Sheet
                 </button>
@@ -4686,7 +4716,7 @@ Last Generated: ${new Date().toLocaleString()}
                   <div style={{ marginBottom: '15px' }}>
                     <strong>Admin Password:</strong> {adminPassword ? '••••••••' : 'Not set'}
                   </div>
-                  <button onClick={() => setEditingPasswords(true)} style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                  <button onClick={() => setEditingPasswords(true)} style={{ padding: '8px 16px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
                     Change Passwords
                   </button>
                 </div>
@@ -4736,7 +4766,7 @@ Last Generated: ${new Date().toLocaleString()}
                         setNewAdminPassword('');
                         alert('Passwords updated! All active sessions have been logged out for security.');
                       }}
-                      style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                      style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
                       Save Passwords
                     </button>
@@ -4747,7 +4777,7 @@ Last Generated: ${new Date().toLocaleString()}
                         setNewOfficialPassword('');
                         setNewAdminPassword('');
                       }}
-                      style={{ padding: '8px 16px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                      style={{ padding: '8px 16px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
                       Cancel
                     </button>
@@ -4764,7 +4794,7 @@ Last Generated: ${new Date().toLocaleString()}
                   <div style={{ marginBottom: '10px' }}>
                     <strong>Regiment Name:</strong> {regimentName}
                   </div>
-                  <button onClick={() => setEditingRegimentName(true)} style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                  <button onClick={() => setEditingRegimentName(true)} style={{ padding: '8px 16px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
                     Edit Name
                   </button>
                 </div>
@@ -4781,7 +4811,7 @@ Last Generated: ${new Date().toLocaleString()}
                         saveData(data);
                         setEditingRegimentName(false);
                       }}
-                      style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                      style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
                       Save
                     </button>
@@ -4790,7 +4820,7 @@ Last Generated: ${new Date().toLocaleString()}
                         setRegimentName(data.regimentName || `Regiment ${currentRegiment}`);
                         setEditingRegimentName(false);
                       }}
-                      style={{ padding: '8px 16px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                      style={{ padding: '8px 16px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
                       Cancel
                     </button>
@@ -4815,7 +4845,7 @@ Last Generated: ${new Date().toLocaleString()}
                           setDashboardImages(newImages);
                           saveData(data);
                         }}
-                        style={{ position: 'absolute', top: '5px', right: '5px', padding: '4px 8px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}
+                        style={{ position: 'absolute', top: '5px', right: '5px', padding: '4px 8px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' }}
                       >
                         ×
                       </button>
@@ -4848,7 +4878,7 @@ Last Generated: ${new Date().toLocaleString()}
                   style={{ display: 'none' }}
                   id="imageUpload"
                 />
-                <label htmlFor="imageUpload" style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-block' }}>
+                <label htmlFor="imageUpload" style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-block' }}>
                   + Add Image
                 </label>
               </div>
@@ -4868,11 +4898,11 @@ Last Generated: ${new Date().toLocaleString()}
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <button 
                   onClick={downloadFullBackup}
-                  style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}
+                  style={{ padding: '8px 14px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}
                 >
                   ⬇️ Download Full Backup
                 </button>
-                <label style={{ padding: '8px 14px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <label style={{ padding: '8px 14px', background: colors.info, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   ⬆️ Restore from Backup
                   <input type="file" accept=".json" onChange={restoreFromBackup} style={{ display: 'none' }} />
                 </label>
@@ -4885,7 +4915,7 @@ Last Generated: ${new Date().toLocaleString()}
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
                 <button 
                   onClick={printSeasonSummary}
-                  style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  style={{ padding: '8px 14px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
                   🖨️ Print Season Summary
                 </button>
@@ -4906,17 +4936,17 @@ Last Generated: ${new Date().toLocaleString()}
                 >
                   📖 Export Help/Instructions
                 </button>
-                <button onClick={exportToExcel} style={{ padding: '8px 14px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button onClick={exportToExcel} style={{ padding: '8px 14px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Download size={16} /> Export to Excel
                 </button>
-                <button onClick={downloadTemplate} style={{ padding: '8px 14px', background: '#17a2b8', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button onClick={downloadTemplate} style={{ padding: '8px 14px', background: colors.info, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Download size={16} /> Download Import Template
                 </button>
-                <label style={{ padding: '8px 14px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <label style={{ padding: '8px 14px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Upload size={16} /> Import from Excel
                   <input type="file" accept=".xlsx,.xls" onChange={importFromExcel} style={{ display: 'none' }} />
                 </label>
-                <button onClick={autoGenerateData} style={{ padding: '8px 14px', background: '#ffc107', color: 'black', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                <button onClick={autoGenerateData} style={{ padding: '8px 14px', background: colors.warning, color: 'black', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
                   Generate Test Data
                 </button>
                 <button 
@@ -4928,7 +4958,7 @@ Last Generated: ${new Date().toLocaleString()}
                       }
                     }
                   }}
-                  style={{ padding: '8px 14px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', background: colors.danger, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                 >
                   🗑️ Clear All Data
                 </button>
@@ -4974,7 +5004,7 @@ Last Generated: ${new Date().toLocaleString()}
                       showToastNotification(`Season renamed to "${trimmedName}"`, 'success');
                     }
                   }}
-                  style={{ padding: '6px 12px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '6px 12px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                 >
                   Rename
                 </button>
@@ -4990,7 +5020,7 @@ Last Generated: ${new Date().toLocaleString()}
                       setShowSeasonManager(false);
                     }
                   }}
-                  style={{ padding: '6px 12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                  style={{ padding: '6px 12px', background: colors.success, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                 >
                   Archive & Start Fresh
                 </button>
@@ -5016,7 +5046,7 @@ Last Generated: ${new Date().toLocaleString()}
                               setCurrentSeason(season.key);
                               setShowSeasonManager(false);
                             }}
-                            style={{ padding: '6px 12px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: colors.primary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                           >
                             View
                           </button>
@@ -5029,7 +5059,7 @@ Last Generated: ${new Date().toLocaleString()}
                                 localStorage.setItem(`grappling_${currentRegiment}_archived_list`, JSON.stringify(newArchived));
                               }
                             }}
-                            style={{ padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                            style={{ padding: '6px 12px', background: colors.danger, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                           >
                             Delete
                           </button>
@@ -5043,7 +5073,7 @@ Last Generated: ${new Date().toLocaleString()}
             
             <button 
               onClick={() => setShowSeasonManager(false)}
-              style={{ marginTop: '20px', width: '100%', padding: '10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+              style={{ marginTop: '20px', width: '100%', padding: '10px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
             >
               Close
             </button>
@@ -5068,10 +5098,10 @@ Last Generated: ${new Date().toLocaleString()}
                     setPasswordError('');
                   }}
                   placeholder="Enter password"
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? '#dc3545' : borderColor}`, background: cardBg, color: textColor, marginBottom: '10px' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? colors.danger : borderColor}`, background: cardBg, color: textColor, marginBottom: '10px' }}
                 />
                 {passwordError && (
-                  <div style={{ color: '#dc3545', fontSize: '13px', marginBottom: '10px' }}>
+                  <div style={{ color: colors.danger, fontSize: '13px', marginBottom: '10px' }}>
                     {passwordError}
                   </div>
                 )}
@@ -5124,7 +5154,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ flex: 1, padding: '10px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
               >
                 Login as Official
               </button>
@@ -5135,7 +5165,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '10px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
               >
                 Cancel
               </button>
@@ -5176,10 +5206,10 @@ Last Generated: ${new Date().toLocaleString()}
                   }}
                   placeholder="Enter password"
                   autoFocus
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? '#dc3545' : borderColor}`, background: cardBg, color: textColor }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? colors.danger : borderColor}`, background: cardBg, color: textColor }}
                 />
                 {passwordError && (
-                  <div style={{ color: '#dc3545', fontSize: '13px', marginTop: '5px' }}>
+                  <div style={{ color: colors.danger, fontSize: '13px', marginTop: '5px' }}>
                     {passwordError}
                   </div>
                 )}
@@ -5221,7 +5251,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ flex: 1, padding: '10px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
               >
                 Login as Coach
               </button>
@@ -5232,7 +5262,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '10px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
               >
                 Cancel
               </button>
@@ -5273,10 +5303,10 @@ Last Generated: ${new Date().toLocaleString()}
               }}
               placeholder="Enter password"
               autoFocus
-              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? '#dc3545' : borderColor}`, background: cardBg, color: textColor, marginBottom: '10px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: `1px solid ${passwordError ? colors.danger : borderColor}`, background: cardBg, color: textColor, marginBottom: '10px' }}
             />
             {passwordError && (
-              <div style={{ color: '#dc3545', fontSize: '13px', marginBottom: '10px' }}>
+              <div style={{ color: colors.danger, fontSize: '13px', marginBottom: '10px' }}>
                 {passwordError}
               </div>
             )}
@@ -5288,7 +5318,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ background: 'none', border: 'none', color: '#007bff', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
+                style={{ background: 'none', border: 'none', color: colors.primary, cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
               >
                 Forgot password? Use Master Recovery Key
               </button>
@@ -5308,7 +5338,7 @@ Last Generated: ${new Date().toLocaleString()}
                     setPasswordError('Incorrect password');
                   }
                 }}
-                style={{ flex: 1, padding: '10px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ flex: 1, padding: '10px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
               >
                 Unlock
               </button>
@@ -5318,7 +5348,7 @@ Last Generated: ${new Date().toLocaleString()}
                   setPasswordInput('');
                   setPasswordError('');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '10px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
               >
                 Cancel
               </button>
@@ -5331,7 +5361,7 @@ Last Generated: ${new Date().toLocaleString()}
       {showMasterKeyInfo && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
           <div style={{ background: cardBg, padding: '30px', borderRadius: '10px', width: '500px', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
-            <h3 style={{ marginTop: 0, color: '#dc3545' }}>🔑 Master Recovery Key</h3>
+            <h3 style={{ marginTop: 0, color: colors.danger }}>🔑 Master Recovery Key</h3>
             
             <div style={{ background: darkMode ? '#3d3d3d' : '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '2px solid #ffc107' }}>
               <p style={{ fontSize: '14px', marginBottom: '15px', color: colors.textMuted }}>
@@ -5340,7 +5370,7 @@ Last Generated: ${new Date().toLocaleString()}
               
               <div style={{ background: darkMode ? '#1a1a1a' : '#fff', padding: '15px', borderRadius: '6px', border: '2px solid #007bff', marginBottom: '15px' }}>
                 <div style={{ fontSize: '12px', color: colors.textMuted, marginBottom: '5px' }}>Master Recovery Key:</div>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', fontFamily: 'monospace', color: '#007bff', letterSpacing: '1px' }}>
+                <div style={{ fontSize: '20px', fontWeight: 'bold', fontFamily: 'monospace', color: colors.primary, letterSpacing: '1px' }}>
                   {MASTER_RECOVERY_KEY}
                 </div>
               </div>
@@ -5363,7 +5393,7 @@ Last Generated: ${new Date().toLocaleString()}
                   navigator.clipboard.writeText(MASTER_RECOVERY_KEY);
                   alert('Master Recovery Key copied to clipboard!');
                 }}
-                style={{ flex: 1, padding: '10px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ flex: 1, padding: '10px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
               >
                 📋 Copy Key
               </button>
@@ -5371,13 +5401,13 @@ Last Generated: ${new Date().toLocaleString()}
                 onClick={() => {
                   window.print();
                 }}
-                style={{ flex: 1, padding: '10px', background: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ flex: 1, padding: '10px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
               >
                 🖨️ Print
               </button>
               <button 
                 onClick={() => setShowMasterKeyInfo(false)}
-                style={{ flex: 1, padding: '10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '10px', background: colors.neutral, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
               >
                 Close
               </button>
@@ -5391,8 +5421,8 @@ Last Generated: ${new Date().toLocaleString()}
           <div onClick={(e) => e.stopPropagation()} style={{ background: cardBg, padding: '20px', borderRadius: '10px', width: '400px', maxHeight: '80vh', overflow: 'auto' }}>
             <h3>{selectedPlayer.name}</h3>
             <p>{data.teams.find(t => t.athleteIds.includes(selectedPlayer.id))?.name} • {selectedPlayer.weight} lbs</p>
-            {selectedPlayer.isCoach && <p style={{ color: '#007bff', fontWeight: 'bold' }}>COACH</p>}
-            {selectedPlayer.injured && <p style={{ color: '#dc3545', fontWeight: 'bold' }}>INJURED</p>}
+            {selectedPlayer.isCoach && <p style={{ color: colors.primary, fontWeight: 'bold' }}>COACH</p>}
+            {selectedPlayer.injured && <p style={{ color: colors.danger, fontWeight: 'bold' }}>INJURED</p>}
             
             <div style={{ marginTop: '15px', marginBottom: '15px' }}>
               <div style={{ display: 'flex', gap: '8px', marginBottom: '15px' }}>
@@ -5458,7 +5488,7 @@ Last Generated: ${new Date().toLocaleString()}
             </div>
             
             <div style={{ display: 'flex', gap: '8px', marginTop: '15px' }}>
-              <button onClick={() => setSelectedPlayer(null)} style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Close</button>
+              <button onClick={() => setSelectedPlayer(null)} style={{ padding: '8px 16px', background: colors.primary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>Close</button>
               {isOfficial && (
                 <button onClick={() => {
                   if (window.confirm(`Delete ${selectedPlayer.name}?`)) {
@@ -5491,7 +5521,7 @@ Last Generated: ${new Date().toLocaleString()}
                     setSelectedPlayer(null);
                     showToastNotification(`Deleted ${selectedPlayer.name} (undo available for 5 min)`, 'info');
                   }
-                }} style={{ padding: '8px 16px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>
+                }} style={{ padding: '8px 16px', background: colors.danger, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', flex: 1 }}>
                   Delete
                 </button>
               )}
