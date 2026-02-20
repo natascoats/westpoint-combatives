@@ -3252,10 +3252,17 @@ Last Generated: ${new Date().toLocaleString()}
                 setShowOfficialNamePrompt(true);
                 setPasswordInput('');
                 setPasswordError('');
-              } else if (newRole === 'admin' && adminPassword) {
-                setShowPasswordPrompt('admin');
-                setPasswordInput('');
-                setPasswordError('');
+              } else if (newRole === 'admin') {
+                // Show password prompt only if password is set
+                if (adminPassword) {
+                  setShowPasswordPrompt('admin');
+                  setPasswordInput('');
+                  setPasswordError('');
+                } else {
+                  // No password, set role directly
+                  setCurrentRole('admin');
+                  saveRoleSession('admin');
+                }
               } else {
                 setCurrentRole(newRole);
               }
@@ -4904,16 +4911,50 @@ Last Generated: ${new Date().toLocaleString()}
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <button 
                       onClick={() => {
+                        // Update password states
                         setCoachPassword(newCoachPassword);
                         setOfficialPassword(newOfficialPassword);
                         setAdminPassword(newAdminPassword);
-                        saveData(data);
+                        
+                        // Save immediately with new password values
+                        const seasonKey = currentSeason === 'active' 
+                          ? `grappling_${currentRegiment}` 
+                          : `grappling_${currentRegiment}_archived_${currentSeason}`;
+                        
+                        const dataToSave = { 
+                          ...data, 
+                          announcements,
+                          adminPassword: newAdminPassword,
+                          officialPassword: newOfficialPassword,
+                          coachPassword: newCoachPassword,
+                          regimentName,
+                          dashboardImages,
+                          seasonName
+                        };
+                        
+                        // Save to Firebase
+                        if (window.firebase) {
+                          try {
+                            const { database, ref, set } = window.firebase;
+                            const path = currentSeason === 'active'
+                              ? `regiments/${currentRegiment}/active`
+                              : `regiments/${currentRegiment}/archived/${currentSeason}`;
+                            const dataRef = ref(database, path);
+                            set(dataRef, dataToSave);
+                          } catch (error) {
+                            console.error('Firebase save error:', error);
+                            localStorage.setItem(seasonKey, JSON.stringify(dataToSave));
+                          }
+                        } else {
+                          localStorage.setItem(seasonKey, JSON.stringify(dataToSave));
+                        }
+                        
                         invalidateAllSessions(); // Logout all users when passwords change
                         setEditingPasswords(false);
                         setNewCoachPassword('');
                         setNewOfficialPassword('');
                         setNewAdminPassword('');
-                        alert('Passwords updated! All active sessions have been logged out for security.');
+                        showToastNotification('Passwords updated! All active sessions have been logged out for security.', 'success');
                       }}
                       style={{ padding: '8px 16px', background: colors.success, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                     >
