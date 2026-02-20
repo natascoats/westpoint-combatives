@@ -1930,12 +1930,22 @@ Last Generated: ${new Date().toLocaleString()}
     match.notes = notes;
     
     if (winner && loser) {
-      winner.stats.wins[method]++;
-      loser.stats.losses[method]++;
-      if (method === "points" || method === "noshow") {
+      // Determine the stat category (noshow and walkover count as points wins)
+      const statCategory = (method === 'noshow' || method === 'walkover') ? 'points' : method;
+      
+      // Only track if it's a valid category
+      if (statCategory === 'points' || statCategory === 'submission') {
+        winner.stats.wins[statCategory]++;
+        loser.stats.losses[statCategory]++;
+      }
+      
+      // Award points
+      if (method === "points" || method === "noshow" || method === "walkover") {
         winner.stats.pointsFor += (2 + positionScore);
       }
-      if (method === "submission") winner.stats.pointsFor += 4;
+      if (method === "submission") {
+        winner.stats.pointsFor += 4;
+      }
     }
 
     if (tournament.rounds[ri].every(m => m.winner)) {
@@ -2055,23 +2065,21 @@ Last Generated: ${new Date().toLocaleString()}
       seasonsActive: []
     };
     
-    // Check active season
-    const activeKey = `grappling_${currentRegiment}`;
-    const activeData = localStorage.getItem(activeKey);
-    if (activeData) {
-      const parsed = JSON.parse(activeData);
-      const athlete = parsed.athletes?.find(a => a.name === athleteName);
+    // FIRST: Include current active season from memory (current data state)
+    // This is the most up-to-date data including unsaved changes
+    if (currentSeason === 'active') {
+      const athlete = data.athletes?.find(a => a.name === athleteName);
       if (athlete) {
         lifetimeStats.wins.points += athlete.stats?.wins?.points || 0;
         lifetimeStats.wins.submission += athlete.stats?.wins?.submission || 0;
         lifetimeStats.losses.points += athlete.stats?.losses?.points || 0;
         lifetimeStats.losses.submission += athlete.stats?.losses?.submission || 0;
         lifetimeStats.pointsFor += athlete.stats?.pointsFor || 0;
-        lifetimeStats.seasonsActive.push(parsed.seasonName || 'Active Season');
+        lifetimeStats.seasonsActive.push(seasonName || 'Active Season');
       }
     }
     
-    // Check archived seasons
+    // Check archived seasons from localStorage
     const archivedListKey = `grappling_${currentRegiment}_archived_list`;
     const archivedList = localStorage.getItem(archivedListKey);
     if (archivedList) {
