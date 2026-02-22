@@ -2948,24 +2948,26 @@ Last Generated: ${new Date().toLocaleString()}
   // Add safety defaults for teams and weight classes
   const safeData = {
     ...data,
-    teams: data.teams.map(t => ({ ...t, athleteIds: t.athleteIds || [] })),
-    weightClasses: data.weightClasses.map(wc => ({ ...wc, athleteIds: wc.athleteIds || [] }))
+    athletes: data.athletes || [],
+    teams: (data.teams || []).map(t => ({ ...t, athleteIds: t.athleteIds || [] })),
+    weightClasses: (data.weightClasses || []).map(wc => ({ ...wc, athleteIds: wc.athleteIds || [] })),
+    tournaments: data.tournaments || []
   };
 
   const teamPoints = safeData.teams.map(team => ({
     name: team.name,
     points: team.athleteIds.reduce((sum, id) => {
       const athlete = safeData.athletes.find(a => a.id === id);
-      return sum + (athlete?.stats.pointsFor || 0);
+      return sum + (athlete?.stats?.pointsFor || 0);
     }, 0)
   })).sort((a, b) => b.points - a.points);
 
   const filteredAthletes = safeData.athletes.filter(a =>
-    a.name.toLowerCase().includes(athleteSearch.toLowerCase())
+    a && a.name && a.name.toLowerCase().includes(athleteSearch.toLowerCase())
   ).sort((a, b) => a.name.localeCompare(b.name));
 
-  const activeTournaments = data.tournaments.filter(t => !t.done);
-  const completedTournaments = data.tournaments.filter(t => t.done).filter(t => {
+  const activeTournaments = safeData.tournaments.filter(t => !t.done);
+  const completedTournaments = safeData.tournaments.filter(t => t.done).filter(t => {
     if (!filterYear && !filterMonth && !filterDay) return true;
     if (filterYear && t.date.year !== filterYear) return false;
     if (filterMonth && t.date.month !== filterMonth) return false;
@@ -3115,7 +3117,7 @@ Last Generated: ${new Date().toLocaleString()}
   };
 
   // Safety check - don't render until data is properly initialized
-  if (!data || !data.athletes || !data.teams || !data.tournaments) {
+  if (!data || !Array.isArray(data.athletes) || !Array.isArray(data.teams) || !Array.isArray(data.tournaments) || !Array.isArray(data.weightClasses)) {
     return (
       <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
         <div style={{ textAlign: 'center' }}>
@@ -3943,8 +3945,8 @@ Last Generated: ${new Date().toLocaleString()}
                     </div>
                   ) : (
                     <div onClick={() => setExpandedTeam(expandedTeam === actualIndex ? null : actualIndex)} style={{ fontWeight: 'bold', cursor: 'pointer', flex: 1, display: 'flex', justifyContent: 'space-between' }}>
-                      <span>{team.name} ({teamPoints.find(tp => tp.name === team.name)?.points || 0} pts) {isCoach && team.name !== coachTeam && <span style={{ fontSize: '12px', color: '#999' }}>(View Only)</span>}</span>
-                      <span>{team.athleteIds.length} athletes</span>
+                      <span>{team.name} ({(teamPoints && teamPoints.find(tp => tp && tp.name === team.name))?.points || 0} pts) {isCoach && team.name !== coachTeam && <span style={{ fontSize: '12px', color: '#999' }}>(View Only)</span>}</span>
+                      <span>{(team.athleteIds || []).length} athletes</span>
                     </div>
                   )}
                   {canEditThisTeam && editingTeam !== actualIndex && (
@@ -3982,8 +3984,9 @@ Last Generated: ${new Date().toLocaleString()}
                           </button>
                         )}
                         <div style={{ marginTop: '10px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-                          {team.athleteIds.map(id => {
+                          {(team.athleteIds || []).map(id => {
                             const athlete = data.athletes.find(a => a.id === id);
+                            if (!athlete) return null; // Skip if athlete not found
                             return (
                               <div key={id} style={{ padding: '8px', background: darkMode ? '#3d3d3d' : '#f9f9f9', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
                                 {editingAthlete === id ? (
@@ -3999,13 +4002,13 @@ Last Generated: ${new Date().toLocaleString()}
                                   </div>
                                 ) : (
                                   <>
-                                    <span onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', color: colors.primary, textDecoration: athlete?.injured ? 'line-through' : 'none', opacity: athlete?.injured ? 0.6 : 1, fontSize: '13px', flex: 1 }}>
-                                      {athlete?.name} {athlete?.isCoach ? '👔' : ''} {athlete?.injured && '🤕'}
+                                    <span onClick={() => setSelectedPlayer(athlete)} style={{ cursor: 'pointer', color: colors.primary, textDecoration: athlete.injured ? 'line-through' : 'none', opacity: athlete.injured ? 0.6 : 1, fontSize: '13px', flex: 1 }}>
+                                      {athlete.name} {athlete.isCoach ? '👔' : ''} {athlete.injured && '🤕'}
                                     </span>
                                     {canEditThisTeam && (
                                       <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                                        <button onClick={() => toggleInjured(id)} style={{ padding: '2px 6px', background: athlete?.injured ? colors.success : colors.warning, color: athlete?.injured ? 'white' : 'black', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
-                                          {athlete?.injured ? 'Heal' : 'Injure'}
+                                        <button onClick={() => toggleInjured(id)} style={{ padding: '2px 6px', background: athlete.injured ? colors.success : colors.warning, color: athlete.injured ? 'white' : 'black', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
+                                          {athlete.injured ? 'Heal' : 'Injure'}
                                         </button>
                                         <button onClick={() => startEditAthlete(id, athlete.name, athlete.weight, athlete.isCoach)} style={{ padding: '2px 6px', background: colors.info, color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '10px' }}>
                                           <Edit2 size={12} />
