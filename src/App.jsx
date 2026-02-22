@@ -362,6 +362,29 @@ function GrapplingTournamentApp() {
   const [showNoShowMenu, setShowNoShowMenu] = useState(null);
   const [showRemoveAthleteMenu, setShowRemoveAthleteMenu] = useState(null);
   const [athleteSearch, setAthleteSearch] = useState('');
+  const [globalSearch, setGlobalSearch] = useState('');
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+
+  // Keyboard shortcuts
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      // "/" to open search (unless in input field)
+      if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+        e.preventDefault();
+        setShowGlobalSearch(true);
+      }
+      // ESC to close modals
+      if (e.key === 'Escape') {
+        setShowGlobalSearch(false);
+        setShowPasswordPrompt(null);
+        setShowCoachTeamSelector(false);
+        setShowOfficialNamePrompt(false);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
   const [seedingMode, setSeedingMode] = useState(null);
   const [seedingAthletes, setSeedingAthletes] = useState([]);
   const [showAddWeightClass, setShowAddWeightClass] = useState(false);
@@ -3278,6 +3301,31 @@ Last Generated: ${new Date().toLocaleString()}
           </h2>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {/* Global Search Button */}
+          <button 
+            onClick={() => setShowGlobalSearch(true)} 
+            style={{ 
+              padding: '8px 16px', 
+              background: 'rgba(255,255,255,0.1)', 
+              border: `1px solid rgba(255,255,255,0.2)`, 
+              borderRadius: radius.md, 
+              cursor: 'pointer', 
+              color: colors.textInverse, 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.medium,
+              transition: 'all 0.2s' 
+            }} 
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} 
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            title="Search everything (Press /)"
+          >
+            <Search size={18} />
+            Search
+          </button>
+          
           {window.firebase && (
             <div style={{ 
               padding: '6px 12px',
@@ -3367,6 +3415,306 @@ Last Generated: ${new Date().toLocaleString()}
           </select>
         </div>
       </header>
+
+      {/* Global Search Modal */}
+      {showGlobalSearch && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            background: 'rgba(0,0,0,0.7)', 
+            backdropFilter: 'blur(5px)',
+            zIndex: 2000,
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            paddingTop: '100px'
+          }}
+          onClick={() => {
+            setShowGlobalSearch(false);
+            setGlobalSearch('');
+          }}
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            style={{ 
+              background: cardBg, 
+              borderRadius: radius.lg, 
+              width: '90%', 
+              maxWidth: '700px',
+              boxShadow: shadows['2xl'],
+              border: `2px solid ${colors.gold}`,
+              maxHeight: '80vh',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {/* Search Input */}
+            <div style={{ padding: '20px', borderBottom: `1px solid ${borderColor}` }}>
+              <div style={{ position: 'relative' }}>
+                <Search 
+                  size={20} 
+                  style={{ 
+                    position: 'absolute', 
+                    left: '12px', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)', 
+                    color: colors.textMuted 
+                  }} 
+                />
+                <input 
+                  autoFocus
+                  value={globalSearch}
+                  onChange={(e) => setGlobalSearch(e.target.value)}
+                  placeholder="Search athletes, teams, tournaments..."
+                  style={{ 
+                    width: '100%', 
+                    padding: '12px 12px 12px 45px', 
+                    fontSize: typography.fontSize.lg,
+                    border: `2px solid ${borderColor}`,
+                    borderRadius: radius.md,
+                    background: colors.bgHover,
+                    color: textColor,
+                    outline: 'none'
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setShowGlobalSearch(false);
+                      setGlobalSearch('');
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Search Results */}
+            <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+              {globalSearch.length < 2 ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: colors.textMuted }}>
+                  <Search size={48} style={{ opacity: 0.3, marginBottom: '16px' }} />
+                  <p style={{ fontSize: typography.fontSize.base }}>Type at least 2 characters to search</p>
+                  <p style={{ fontSize: typography.fontSize.sm, marginTop: '8px' }}>
+                    Search across athletes, teams, and tournaments
+                  </p>
+                </div>
+              ) : (() => {
+                const query = globalSearch.toLowerCase();
+                const athleteResults = safeData.athletes.filter(a => 
+                  a && a.name && a.name.toLowerCase().includes(query)
+                );
+                const teamResults = safeData.teams.filter(t => 
+                  t && t.name && t.name.toLowerCase().includes(query)
+                );
+                const tournamentResults = safeData.tournaments.filter(t => 
+                  t && t.name && t.name.toLowerCase().includes(query)
+                );
+                const totalResults = athleteResults.length + teamResults.length + tournamentResults.length;
+
+                if (totalResults === 0) {
+                  return (
+                    <div style={{ textAlign: 'center', padding: '40px', color: colors.textMuted }}>
+                      <p style={{ fontSize: typography.fontSize.lg }}>No results found for "{globalSearch}"</p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    {/* Athletes */}
+                    {athleteResults.length > 0 && (
+                      <div>
+                        <h4 style={{ 
+                          margin: '0 0 12px 0', 
+                          fontSize: typography.fontSize.sm, 
+                          textTransform: 'uppercase',
+                          color: colors.textMuted,
+                          letterSpacing: typography.letterSpacing.wide
+                        }}>
+                          Athletes ({athleteResults.length})
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {athleteResults.slice(0, 5).map(athlete => {
+                            const team = safeData.teams.find(t => t.athleteIds.includes(athlete.id));
+                            return (
+                              <div 
+                                key={athlete.id}
+                                onClick={() => {
+                                  setSelectedPlayer(athlete);
+                                  setCurrentTab('athletes');
+                                  setShowGlobalSearch(false);
+                                  setGlobalSearch('');
+                                }}
+                                style={{ 
+                                  padding: '12px', 
+                                  background: colors.bgHover, 
+                                  borderRadius: radius.md,
+                                  cursor: 'pointer',
+                                  border: `1px solid ${borderColor}`,
+                                  transition: 'all 0.2s'
+                                }}
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.background = colors.primaryHover + '30';
+                                  e.currentTarget.style.borderColor = colors.primary;
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.background = colors.bgHover;
+                                  e.currentTarget.style.borderColor = borderColor;
+                                }}
+                              >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div>
+                                    <div style={{ fontWeight: typography.fontWeight.semibold, color: textColor }}>
+                                      ⚔️ {athlete.name} {athlete.isCoach && '👔'}
+                                    </div>
+                                    <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: '4px' }}>
+                                      {team?.name || 'No Team'} • {athlete.weight} lbs
+                                    </div>
+                                  </div>
+                                  <div style={{ fontSize: typography.fontSize.sm, color: colors.textMuted }}>
+                                    {athlete.stats.wins.points + athlete.stats.wins.submission}-
+                                    {athlete.stats.losses.points + athlete.stats.losses.submission}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                          {athleteResults.length > 5 && (
+                            <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, textAlign: 'center', padding: '8px' }}>
+                              +{athleteResults.length - 5} more athletes
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Teams */}
+                    {teamResults.length > 0 && (
+                      <div>
+                        <h4 style={{ 
+                          margin: '0 0 12px 0', 
+                          fontSize: typography.fontSize.sm, 
+                          textTransform: 'uppercase',
+                          color: colors.textMuted,
+                          letterSpacing: typography.letterSpacing.wide
+                        }}>
+                          Teams ({teamResults.length})
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {teamResults.map(team => (
+                            <div 
+                              key={team.name}
+                              onClick={() => {
+                                setCurrentTab('teams');
+                                setShowGlobalSearch(false);
+                                setGlobalSearch('');
+                              }}
+                              style={{ 
+                                padding: '12px', 
+                                background: colors.bgHover, 
+                                borderRadius: radius.md,
+                                cursor: 'pointer',
+                                border: `1px solid ${borderColor}`,
+                                transition: 'all 0.2s'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = colors.primaryHover + '30';
+                                e.currentTarget.style.borderColor = colors.primary;
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = colors.bgHover;
+                                e.currentTarget.style.borderColor = borderColor;
+                              }}
+                            >
+                              <div style={{ fontWeight: typography.fontWeight.semibold, color: textColor }}>
+                                🏆 {team.name}
+                              </div>
+                              <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: '4px' }}>
+                                {team.athleteIds.length} athletes • {(teamPoints && teamPoints.find(tp => tp && tp.name === team.name))?.points || 0} points
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tournaments */}
+                    {tournamentResults.length > 0 && (
+                      <div>
+                        <h4 style={{ 
+                          margin: '0 0 12px 0', 
+                          fontSize: typography.fontSize.sm, 
+                          textTransform: 'uppercase',
+                          color: colors.textMuted,
+                          letterSpacing: typography.letterSpacing.wide
+                        }}>
+                          Tournaments ({tournamentResults.length})
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {tournamentResults.map(tournament => (
+                            <div 
+                              key={tournament.name}
+                              onClick={() => {
+                                setCurrentTab(tournament.done ? 'completed' : 'tournaments');
+                                setShowGlobalSearch(false);
+                                setGlobalSearch('');
+                              }}
+                              style={{ 
+                                padding: '12px', 
+                                background: colors.bgHover, 
+                                borderRadius: radius.md,
+                                cursor: 'pointer',
+                                border: `1px solid ${borderColor}`,
+                                transition: 'all 0.2s'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = colors.primaryHover + '30';
+                                e.currentTarget.style.borderColor = colors.primary;
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = colors.bgHover;
+                                e.currentTarget.style.borderColor = borderColor;
+                              }}
+                            >
+                              <div style={{ fontWeight: typography.fontWeight.semibold, color: textColor }}>
+                                🛡️ {tournament.name}
+                              </div>
+                              <div style={{ fontSize: typography.fontSize.xs, color: colors.textMuted, marginTop: '4px' }}>
+                                {tournament.weight} • Round {tournament.rounds.length} • {tournament.done ? 'Complete' : 'In Progress'}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Footer */}
+            <div style={{ 
+              padding: '12px 20px', 
+              borderTop: `1px solid ${borderColor}`,
+              fontSize: typography.fontSize.xs,
+              color: colors.textMuted,
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}>
+              <span>Press <kbd style={{ 
+                padding: '2px 6px', 
+                background: colors.bgHover, 
+                borderRadius: '3px', 
+                border: `1px solid ${borderColor}`,
+                fontFamily: 'monospace'
+              }}>ESC</kbd> to close</span>
+              <span>Click result to jump to it</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast Notification */}
       {showToast && (
@@ -3650,7 +3998,13 @@ Last Generated: ${new Date().toLocaleString()}
                 <div style={{ background: cardBg, borderRadius: '10px', padding: '15px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', height: '450px', display: 'flex', flexDirection: 'column' }}>
                   <h4 style={{ margin: '0 0 15px 0', fontSize: '16px' }}>🏆 Top 5 Athletes</h4>
                   {data.athletes.length === 0 ? (
-                    <p style={{ color: '#666', fontStyle: 'italic', fontSize: '13px' }}>No athlete data yet</p>
+                    <div style={{ textAlign: 'center', padding: '40px 20px', color: colors.textMuted }}>
+                      <div style={{ fontSize: '48px', marginBottom: '12px', opacity: 0.3 }}>⚔️</div>
+                      <p style={{ fontSize: typography.fontSize.sm, margin: 0 }}>No athletes yet</p>
+                      <p style={{ fontSize: typography.fontSize.xs, margin: '8px 0 0 0' }}>
+                        Add athletes to see top performers
+                      </p>
+                    </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto', flex: 1 }}>
                       {[...data.athletes].sort((a, b) => b.stats.pointsFor - a.stats.pointsFor).slice(0, 5).map((athlete, idx) => {
@@ -3819,7 +4173,13 @@ Last Generated: ${new Date().toLocaleString()}
             <div style={{ ...cardStyles.base, marginBottom: spacing.lg }}>
               <h4 style={{ textAlign: 'center', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide, fontWeight: typography.fontWeight.extrabold }}>TEAM POINTS LEADERBOARD</h4>
               {teamPoints.length === 0 ? (
-                <p style={{ color: '#666', fontStyle: 'italic', textAlign: 'center' }}>No team data yet</p>
+                <div style={{ textAlign: 'center', padding: '60px 40px', color: colors.textMuted }}>
+                  <div style={{ fontSize: '64px', marginBottom: '16px', opacity: 0.3 }}>📊</div>
+                  <h4 style={{ margin: '0 0 8px 0', fontSize: typography.fontSize.lg, color: textColor }}>No Team Data Yet</h4>
+                  <p style={{ fontSize: typography.fontSize.sm, margin: 0 }}>
+                    Create teams and score matches to see the leaderboard
+                  </p>
+                </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '10px', minHeight: '300px' }}>
                   {teamPoints.map((team, idx) => {
@@ -3909,7 +4269,46 @@ Last Generated: ${new Date().toLocaleString()}
               </div>
             )}
 
-            {data.teams.length === 0 ? <p style={{ color: '#666', fontStyle: 'italic' }}>No teams yet</p> : data.teams.map((team, i) => {
+            {data.teams.length === 0 ? (
+              <div style={{ 
+                background: cardBg, 
+                borderRadius: radius.lg, 
+                padding: '60px 40px', 
+                textAlign: 'center',
+                border: `2px dashed ${borderColor}`
+              }}>
+                <div style={{ fontSize: '64px', marginBottom: '20px', opacity: 0.3 }}>🏆</div>
+                <h3 style={{ 
+                  margin: '0 0 12px 0', 
+                  fontSize: typography.fontSize.xl,
+                  color: textColor
+                }}>
+                  No Teams Yet
+                </h3>
+                <p style={{ 
+                  color: colors.textMuted, 
+                  fontSize: typography.fontSize.base,
+                  marginBottom: '24px',
+                  maxWidth: '400px',
+                  margin: '0 auto 24px'
+                }}>
+                  Create your first team to start organizing athletes. Teams help you group and manage competitors together.
+                </p>
+                {isOfficial && (
+                  <button 
+                    onClick={() => setShowAddTeam(true)} 
+                    style={{ 
+                      ...getButtonStyle('primary'),
+                      padding: '12px 24px',
+                      fontSize: typography.fontSize.base
+                    }}
+                  >
+                    <Plus size={20} style={{ marginRight: '8px' }} />
+                    Create Your First Team
+                  </button>
+                )}
+              </div>
+            ) : data.teams.map((team, i) => {
               const actualIndex = i;
               const canEditThisTeam = isOfficial || (isCoach && team.name === coachTeam);
               return (
@@ -4274,9 +4673,47 @@ Last Generated: ${new Date().toLocaleString()}
               }
               return true;
             }).length === 0 ? (
-              <p style={{ color: '#666', fontStyle: 'italic' }}>
-                {tournamentFilter === 'mine' ? 'No tournaments managed by you' : 'No active tournaments'}
-              </p>
+              <div style={{ 
+                background: cardBg, 
+                borderRadius: radius.lg, 
+                padding: '60px 40px', 
+                textAlign: 'center',
+                border: `2px dashed ${borderColor}`
+              }}>
+                <div style={{ fontSize: '64px', marginBottom: '20px', opacity: 0.3 }}>🛡️</div>
+                <h3 style={{ 
+                  margin: '0 0 12px 0', 
+                  fontSize: typography.fontSize.xl,
+                  color: textColor
+                }}>
+                  {tournamentFilter === 'mine' ? 'No Tournaments Managed By You' : 'No Active Tournaments'}
+                </h3>
+                <p style={{ 
+                  color: colors.textMuted, 
+                  fontSize: typography.fontSize.base,
+                  marginBottom: '24px',
+                  maxWidth: '400px',
+                  margin: '0 auto 24px'
+                }}>
+                  {tournamentFilter === 'mine' 
+                    ? 'Create a tournament to start managing matches and tracking results.'
+                    : 'Start a new tournament to begin bracket-style competition between athletes.'
+                  }
+                </p>
+                {isOfficial && !seedingMode && (
+                  <button 
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    style={{ 
+                      ...getButtonStyle('primary'),
+                      padding: '12px 24px',
+                      fontSize: typography.fontSize.base
+                    }}
+                  >
+                    <Plus size={20} style={{ marginRight: '8px' }} />
+                    Create Your First Tournament
+                  </button>
+                )}
+              </div>
             ) : (
               activeTournaments.filter(tournament => {
                 if (tournamentFilter === 'mine' && isOfficial && officialName) {
